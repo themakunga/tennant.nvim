@@ -2,7 +2,7 @@ name: Contribution policy
 on:
   pull_request_target: # zizmor: ignore[dangerous-triggers] -- Metadata only; no checkout, code execution, or PR-controlled shell input.
     types: [opened, synchronize, reopened, edited]
-    branches: [develop, main]
+    branches: [main]
   issue_comment:
     types: [created]
 permissions:
@@ -31,15 +31,15 @@ jobs:
                   cmd += ['--method', 'POST', '--input', '-']
               return json.loads(subprocess.check_output(cmd, input=json.dumps(data).encode() if data else None))
           pr = api(f'pulls/{number}')
-          if pr['state'] != 'open' or pr['base']['ref'] not in ('main', 'develop'):
+          if pr['state'] != 'open' or pr['base']['ref'] != 'main':
               raise SystemExit(0)
-          allowed = pr['base']['ref'] == 'develop' or (pr['head']['ref'] == 'develop' and pr['head']['repo']['full_name'] == repo)
+          allowed = pr['head']['repo']['full_name'] == repo
           pages = json.loads(subprocess.check_output(['gh', 'api', '--paginate', '--slurp', f'repos/{repo}/pulls/{number}/reviews?per_page=100']))
           reviews = [review for page in pages for review in page]
           owner_reviews = [r for r in reviews if r['user']['login'] == 'themakunga' and r['state'] != 'COMMENTED']
           approved = pr['user']['login'] == 'themakunga' or bool(owner_reviews and owner_reviews[-1]['state'] == 'APPROVED' and owner_reviews[-1]['commit_id'] == pr['head']['sha'])
           ok = allowed and approved
-          description = 'Approved contribution route and owner review' if ok else 'Requires develop route and current approval from @themakunga'
+          description = 'Approved' if ok else 'Requires same-repo branch and current approval from @themakunga'
           api('statuses/' + pr['head']['sha'], {'state': 'success' if ok else 'failure', 'context': 'Contribution policy', 'description': description})
           with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as output:
               output.write(description + '\n')
