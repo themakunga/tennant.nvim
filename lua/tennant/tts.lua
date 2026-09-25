@@ -1,4 +1,5 @@
 local M = {}
+local translate = require('tennant.i18n').get
 
 local _job = nil
 
@@ -49,7 +50,7 @@ M.backend = detect_backend()
 
 M.speak = function(text)
   if not M.backend then
-    vim.notify('[tennant] Sin backend TTS disponible', vim.log.levels.WARN)
+    vim.notify('[tennant] ' .. translate('No TTS backend available'), vim.log.levels.WARN)
     return
   end
   text = vim.trim(text):gsub('%s+', ' ')

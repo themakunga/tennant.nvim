@@ -1,12 +1,13 @@
 local M = {}
+local translate = require('tennant.i18n').get
 
 local _last = nil
 
 local LEVEL_NAMES = {
   [vim.log.levels.TRACE] = 'trace',
   [vim.log.levels.DEBUG] = 'debug',
-  [vim.log.levels.INFO] = 'información',
-  [vim.log.levels.WARN] = 'advertencia',
+  [vim.log.levels.INFO] = 'information',
+  [vim.log.levels.WARN] = 'warning',
   [vim.log.levels.ERROR] = 'error',
   [vim.log.levels.OFF] = 'off',
 }
@@ -23,11 +24,11 @@ end
 M.read_last = function()
   local speak = require('tennant.tts').speak
   if not _last then
-    speak('Sin notificaciones recientes')
+    speak(translate('No recent notifications'))
     return
   end
-  local level_name = LEVEL_NAMES[_last.level] or 'información'
-  speak(level_name .. ': ' .. _last.msg)
+  local level_name = LEVEL_NAMES[_last.level] or 'information'
+  speak(translate(level_name) .. ': ' .. _last.msg)
 end
 
 return M

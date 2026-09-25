@@ -5,7 +5,11 @@ package.loaded['tennant.tts'] = {
   backend = true,
   speak = function(text) spoken = text end,
 }
-require('tennant').setup({ prefix = ',t' })
+local english = vim.env.TENNANT_TEST_LANGUAGE == 'en'
+require('tennant').setup({ prefix = ',t', language = english and 'en' or 'es' })
+local function_label = english and 'function: ' or 'función: '
+local file_label = english and 'file: ' or 'archivo: '
+local exhausted = english and 'No more nesting levels' or 'No existen más niveles de anidación'
 local lines = {
   'function outer()',
   '  function inner()',
@@ -24,9 +28,9 @@ local function keys(input)
   vim.api.nvim_feedkeys(input, 'xt', false)
 end
 
-local inner = 'función: ' .. table.concat({ 'function inner()', lines[3], lines[4] }, '\n')
-local outer = 'función: ' .. table.concat(lines, '\n', 1, 6)
-local file = 'archivo: ' .. table.concat(lines, '\n')
+local inner = function_label .. table.concat({ 'function inner()', lines[3], lines[4] }, '\n')
+local outer = function_label .. table.concat(lines, '\n', 1, 6)
+local file = file_label .. table.concat(lines, '\n')
 keys(',tb')
 assert(spoken == inner, 'Read the entire inner function')
 keys(',tp')
@@ -35,7 +39,7 @@ vim.cmd('TennantParent')
 assert(vim.trim(spoken) == file, 'Read the file at the root')
 for _ = 1, 2 do
   keys(',tp')
-  assert(spoken == 'No existen más niveles de anidación', 'Announce exhaustion')
+  assert(spoken == exhausted, 'Announce exhaustion')
 end
 vim.cmd('TennantBlock')
 assert(spoken == inner, 'Block command restarts at the cursor')
@@ -52,5 +56,5 @@ vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'plain text' })
 keys(',tb')
 assert(spoken == 'plain text', 'Missing parser falls back to current line')
 keys(',tp')
-assert(spoken == 'No existen más niveles de anidación', 'Never reuse another buffer node')
+assert(spoken == exhausted, 'Never reuse another buffer node')
 print('Nested block checks passed')

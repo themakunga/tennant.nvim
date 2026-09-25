@@ -91,9 +91,12 @@ require('rocks').install('tennant.nvim')
 
 ```lua
 require('tennant').setup({
-  prefix = '<leader>tv',  -- prefijo de los atajos de teclado
+  prefix = '<leader>tv',
+  language = 'es', -- 'es' (default) or 'en'
 })
 ```
+
+`language` cambia los avisos, las etiquetas leídas y las descripciones de comandos y atajos. El contenido del archivo y las notificaciones externas se leen sin traducir. La voz y pronunciación dependen de la configuración del motor TTS del sistema; selecciona una voz inglesa en ese motor para leer inglés.
 
 ### Atajos de teclado
 
@@ -214,9 +217,12 @@ require('rocks').install('tennant.nvim')
 
 ```lua
 require('tennant').setup({
-  prefix = '<leader>tv',  -- keymap prefix
+  prefix = '<leader>tv',
+  language = 'en', -- 'es' (default) or 'en'
 })
 ```
+
+Set `language = 'en'` for English announcements, spoken labels, and command/keymap descriptions. Spanish (`'es'`) remains the default. File contents and external notifications are read without translation. Voice and pronunciation follow your system TTS configuration; select an English voice in that engine for English speech.
 
 ### Keymaps
 
@@ -243,7 +249,7 @@ With the default prefix `<leader>tv`:
 | `:TennantNotify` | Read last notification |
 | `:TennantStop` | Stop current speech |
 
-`<leader>tvb` starts at the nearest block to the cursor. Each `<leader>tvp` moves up one level through the whole file, then announces “No existen más niveles de anidación” (no more nesting levels). Moving the cursor or editing text restarts traversal from the current position. Without a Treesitter parser, reading falls back to the current line.
+`<leader>tvb` starts at the nearest block to the cursor. Each `<leader>tvp` moves up one level through the whole file, then announces “No more nesting levels” when configured in English. Moving the cursor or editing text restarts traversal from the current position. Without a Treesitter parser, reading falls back to the current line.
 
 ### Treesitter block types
 

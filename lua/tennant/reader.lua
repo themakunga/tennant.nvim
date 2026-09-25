@@ -1,26 +1,27 @@
 local M = {}
+local translate = require('tennant.i18n').get
 
 -- Block types to announce via treesitter
 local BLOCK_LABELS = {
-  function_definition = 'función',
-  function_declaration = 'función',
-  method_definition = 'método',
-  method_declaration = 'método',
-  arrow_function = 'función flecha',
+  function_definition = 'function',
+  function_declaration = 'function',
+  method_definition = 'method',
+  method_declaration = 'method',
+  arrow_function = 'arrow function',
   variable_declaration = 'variable',
   lexical_declaration = 'variable',
-  const_declaration = 'constante',
-  class_definition = 'clase',
-  class_declaration = 'clase',
-  if_statement = 'bloque if',
-  for_statement = 'bucle for',
-  for_in_statement = 'bucle for in',
-  while_statement = 'bucle while',
-  do_statement = 'bucle do while',
-  try_statement = 'bloque try',
-  return_statement = 'retorno',
-  import_declaration = 'importación',
-  export_statement = 'exportación',
+  const_declaration = 'constant',
+  class_definition = 'class',
+  class_declaration = 'class',
+  if_statement = 'if block',
+  for_statement = 'for loop',
+  for_in_statement = 'for in loop',
+  while_statement = 'while loop',
+  do_statement = 'do while loop',
+  try_statement = 'try block',
+  return_statement = 'return',
+  import_declaration = 'import',
+  export_statement = 'export',
 }
 
 local function tts()
@@ -69,7 +70,7 @@ M.block = function(parent)
   if parent then
     node = node and enclosing_block(node:parent())
     if not node then
-      tts().speak('No existen más niveles de anidación')
+      tts().speak(translate('No more nesting levels'))
       return
     end
   elseif not node then
@@ -78,8 +79,8 @@ M.block = function(parent)
   end
 
   block_state = { node = node, buffer = buffer, cursor = cursor, tick = tick }
-  local label = BLOCK_LABELS[node:type()] or 'archivo'
-  tts().speak(label .. ': ' .. vim.treesitter.get_node_text(node, buffer))
+  local label = BLOCK_LABELS[node:type()] or 'file'
+  tts().speak(translate(label) .. ': ' .. vim.treesitter.get_node_text(node, buffer))
 end
 
 return M
