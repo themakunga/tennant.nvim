@@ -49,8 +49,7 @@ local function read_current(first)
   if session.index == #session.entries then
     prompt = translate('No more notifications. Press x to close.')
   end
-  vim.api.nvim_buf_set_lines(session.buffer, 0, -1, false,
-    vim.split(text .. '\n\n' .. prompt, '\n', { plain = true }))
+  vim.api.nvim_buf_set_lines(session.buffer, 0, -1, false, vim.split(text .. '\n\n' .. prompt, '\n', { plain = true }))
   require('tennant.tts').speak(text .. '. ' .. prompt)
 end
 
@@ -64,8 +63,13 @@ M.read_last = function()
   local width = math.max(1, math.min(70, vim.o.columns - 4))
   local height = math.max(1, math.min(8, vim.o.lines - 4))
   local window = vim.api.nvim_open_win(buffer, true, {
-    relative = 'editor', width = width, height = height,
-    row = 1, col = 1, style = 'minimal', border = 'single',
+    relative = 'editor',
+    width = width,
+    height = height,
+    row = 1,
+    col = 1,
+    style = 'minimal',
+    border = 'single',
   })
   vim.bo[buffer].bufhidden = 'wipe'
   session = { buffer = buffer, window = window, entries = vim.deepcopy(history), index = 1 }

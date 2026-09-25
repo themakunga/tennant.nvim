@@ -3,7 +3,9 @@ vim.opt.rtp:prepend('.')
 local spoken
 package.loaded['tennant.tts'] = {
   backend = true,
-  speak = function(text) spoken = text end,
+  speak = function(text)
+    spoken = text
+  end,
 }
 local english = vim.env.TENNANT_TEST_LANGUAGE == 'en'
 require('tennant').setup({ prefix = ',t', language = english and 'en' or 'es' })

@@ -1,0 +1,48 @@
+name: Contribution policy
+on:
+  pull_request_target: # zizmor: ignore[dangerous-triggers] -- Metadata only; no checkout, code execution, or PR-controlled shell input.
+    types: [opened, synchronize, reopened, edited]
+    branches: [develop, main]
+  pull_request_review:
+    types: [submitted, dismissed]
+  issue_comment:
+    types: [created]
+permissions:
+  contents: read
+  pull-requests: read
+  statuses: write
+jobs:
+  policy:
+    if: github.event_name != 'issue_comment' || (github.event.issue.pull_request && github.event.comment.user.login == 'themakunga' && github.event.comment.body == '/recheck')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      # Metadata only. Never check out or execute code from a contributor PR.
+      - name: Check destination and owner approval
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          import json, os, subprocess
+          event = json.load(open(os.environ['GITHUB_EVENT_PATH']))
+          repo = os.environ['GITHUB_REPOSITORY']
+          number = event.get('pull_request', event.get('issue', {}))['number']
+          def api(path, data=None):
+              cmd = ['gh', 'api', f'repos/{repo}/{path}']
+              if data is not None:
+                  cmd += ['--method', 'POST', '--input', '-']
+              return json.loads(subprocess.check_output(cmd, input=json.dumps(data).encode() if data else None))
+          pr = api(f'pulls/{number}')
+          if pr['state'] != 'open' or pr['base']['ref'] not in ('main', 'develop'):
+              raise SystemExit(0)
+          allowed = pr['base']['ref'] == 'develop' or (pr['head']['ref'] == 'develop' and pr['head']['repo']['full_name'] == repo)
+          pages = json.loads(subprocess.check_output(['gh', 'api', '--paginate', '--slurp', f'repos/{repo}/pulls/{number}/reviews?per_page=100']))
+          reviews = [review for page in pages for review in page]
+          owner_reviews = [r for r in reviews if r['user']['login'] == 'themakunga' and r['state'] != 'COMMENTED']
+          approved = pr['user']['login'] == 'themakunga' or bool(owner_reviews and owner_reviews[-1]['state'] == 'APPROVED' and owner_reviews[-1]['commit_id'] == pr['head']['sha'])
+          ok = allowed and approved
+          description = 'Approved contribution route and owner review' if ok else 'Requires develop route and current approval from @themakunga'
+          api('statuses/' + pr['head']['sha'], {'state': 'success' if ok else 'failure', 'context': 'Contribution policy', 'description': description})
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as output:
+              output.write(description + '\n')
+          PY

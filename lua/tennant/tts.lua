@@ -8,22 +8,22 @@ local function detect_backend()
 
   if sysname == 'Darwin' then
     return function(text)
-      return { 'say', text }
+      return { 'say' }, { stdin = text }
     end
   end
 
   if sysname:match('Windows') then
     return function(text)
-      local safe = text:gsub('"', ''):gsub("'", '')
       return {
         'powershell',
         '-NoProfile',
+        '-NonInteractive',
         '-Command',
-        string.format(
-          'Add-Type -AssemblyName System.Speech; (New-Object System.Speech.Synthesis.SpeechSynthesizer).Speak("%s")',
-          safe
-        ),
-      }
+        '[Console]::InputEncoding = [System.Text.Encoding]::UTF8; '
+          .. 'Add-Type -AssemblyName System.Speech; '
+          .. '$speaker = New-Object System.Speech.Synthesis.SpeechSynthesizer; '
+          .. '$speaker.Speak([Console]::In.ReadToEnd())',
+      }, { stdin = text }
     end
   end
 
@@ -33,12 +33,14 @@ local function detect_backend()
     if vim.fn.executable(bin) == 1 then
       if bin == 'festival' then
         return function(text)
-          local safe = text:gsub("'", '')
-          return { 'sh', '-c', string.format("printf '%%s' '%s' | festival --tts", safe) }
+          return { 'festival', '--tts' }, { stdin = text }
         end
       end
       return function(text)
-        return { bin, text }
+        if bin == 'spd-say' then
+          return { bin, '--wait', '--', text }
+        end
+        return { bin, '--stdin' }, { stdin = text }
       end
     end
   end
@@ -58,9 +60,27 @@ M.speak = function(text)
     return
   end
   M.stop()
-  _job = vim.system(M.backend(text), {}, function()
-    _job = nil
+  local job
+  local ok, result = pcall(function()
+    local command, options = M.backend(text)
+    return vim.system(command, options or {}, function(exit)
+      vim.schedule(function()
+        if _job ~= job then
+          return
+        end
+        _job = nil
+        if exit.code ~= 0 then
+          vim.notify('[tennant] ' .. translate('TTS process failed'), vim.log.levels.WARN)
+        end
+      end)
+    end)
   end)
+  if ok then
+    job = result
+    _job = job
+  else
+    vim.notify('[tennant] ' .. translate('Unable to start TTS process'), vim.log.levels.WARN)
+  end
 end
 
 M.stop = function()

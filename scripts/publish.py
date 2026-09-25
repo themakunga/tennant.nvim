@@ -1,0 +1,84 @@
+#!/usr/bin/env python3
+"""Idempotent develop PR and daily release; only invoked by trusted push jobs."""
+from datetime import datetime
+import hashlib
+import json
+import os
+from pathlib import Path
+import re
+import subprocess
+from zoneinfo import ZoneInfo
+
+REPO = os.environ['GITHUB_REPOSITORY']
+SHA = os.environ['GITHUB_SHA']
+RUN = os.environ['GITHUB_RUN_ID']
+
+def api(path, method='GET', data=None):
+    command = ['gh', 'api', f'repos/{REPO}/{path}', '--method', method]
+    if data is not None:
+        command += ['--input', '-']
+    value = subprocess.check_output(command, input=json.dumps(data).encode() if data is not None else None)
+    return json.loads(value) if value.strip() else None
+
+if api('git/ref/heads/develop')['object']['sha'] != SHA:
+    raise SystemExit('Newer develop commit exists; skipping stale publication')
+comparison = api('compare/main...develop')
+if comparison['ahead_by'] == 0:
+    raise SystemExit('No changes to promote')
+prs = api(f'pulls?state=open&base=main&head={REPO.split("/")[0]}:develop')
+pr = prs[0] if prs else api('pulls', 'POST', {
+    'title': 'Promote develop to main', 'head': 'develop', 'base': 'main',
+    'body': 'Development integration. Review the CI report below. Only @themakunga may merge.',
+})
+number = pr['number']
+marker = '<!-- tennant-ci-report -->'
+jobs = api(f'actions/runs/{RUN}/jobs?per_page=100')['jobs']
+link = f'https://github.com/{REPO}/actions/runs/{RUN}'
+body = marker + f'\n## CI report\n\nCommit: `{SHA}`\n\n[Run and downloadable reports]({link})\n\n'
+body += '| Check | Result |\n|---|---|\n'
+for job in jobs:
+    if job['name'] != 'Report and daily pre-release':
+        body += f'| {job["name"]} | {job["conclusion"] or job["status"]} |\n'
+pages = json.loads(subprocess.check_output(['gh', 'api', '--paginate', '--slurp', f'repos/{REPO}/issues/{number}/comments?per_page=100']))
+comments = [comment for page in pages for comment in page]
+comment = next((c for c in comments if c['user']['login'] == 'github-actions[bot]' and c['body'].startswith(marker)), None)
+previous = [] if not comment else re.findall(r'https://github\.com/[^\s)]+/actions/runs/\d+', comment['body'])
+body += '\nRecent runs: ' + ' · '.join(f'[run {url.rsplit("/", 1)[-1]}]({url})' for url in dict.fromkeys([link] + previous[:9]))
+if comment:
+    api(f'issues/comments/{comment["id"]}', 'PATCH', {'body': body})
+else:
+    api(f'issues/{number}/comments', 'POST', {'body': body})
+with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as output:
+    output.write(body)
+if os.environ['CI_RESULT'] != 'success':
+    raise SystemExit('CI failed: release unchanged')
+version = Path('VERSION').read_text().strip()
+if not re.fullmatch(r'\d+\.\d+\.\d+', version):
+    raise SystemExit('VERSION must contain X.Y.Z')
+date = datetime.now(ZoneInfo('America/Santiago')).strftime('%Y%m%d')
+tag = f'v{version}-pre-release.{date}'
+# Validate the head again immediately before publication.
+if api('git/ref/heads/develop')['object']['sha'] != SHA:
+    raise SystemExit('Newer develop commit exists; release unchanged')
+refs = api(f'git/matching-refs/tags/{tag}')
+if any(ref['ref'] == f'refs/tags/{tag}' for ref in refs):
+    api(f'git/refs/tags/{tag}', 'PATCH', {'sha': SHA, 'force': True})
+else:
+    api('git/refs', 'POST', {'ref': f'refs/tags/{tag}', 'sha': SHA})
+notes = subprocess.check_output(['git', 'log', '--format=- %s (%h)', 'origin/main..' + SHA], text=True)
+notes = f'Development snapshot for {date} (America/Santiago).\n\nCommit: `{SHA}`\n\n{notes}\n[Validation]({link})\n'
+Path('reports').mkdir(exist_ok=True)
+Path('reports/release.md').write_text(notes)
+release_exists = subprocess.run(['gh', 'release', 'view', tag], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL).returncode == 0
+command = ['gh', 'release', 'edit' if release_exists else 'create', tag, '--title', tag, '--prerelease', '--notes-file', 'reports/release.md']
+if not release_exists:
+    command += ['--verify-tag']
+subprocess.run(command, check=True)
+assets = []
+for extension, fmt in [('tar.gz', 'tar.gz'), ('zip', 'zip')]:
+    path = Path(f'reports/tennant.nvim-{tag}.{extension}')
+    subprocess.run(['git', 'archive', '--format=' + fmt, '--prefix=tennant.nvim/', '--output=' + str(path), SHA], check=True)
+    assets.append(path)
+checksums = Path('reports/SHA256SUMS')
+checksums.write_text(''.join(f'{hashlib.sha256(p.read_bytes()).hexdigest()}  {p.name}\n' for p in assets))
+subprocess.run(['gh', 'release', 'upload', tag, *map(str, assets), str(checksums), '--clobber'], check=True)

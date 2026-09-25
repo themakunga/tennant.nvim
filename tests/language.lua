@@ -1,14 +1,18 @@
 -- Run: nvim --headless -u NONE -i NONE -l tests/language.lua
 vim.opt.rtp:prepend('.')
 local spoken, notice
-vim.notify = function(text) notice = text end
+vim.notify = function(text)
+  notice = text
+end
 local tts = require('tennant.tts')
 tts.backend = nil
 require('tennant').setup({ language = 'en', prefix = ',t' })
 assert(notice:find('No TTS backend found.', 1, true))
 tts.speak('test')
 assert(notice == '[tennant] No TTS backend available')
-tts.speak = function(text) spoken = text end
+tts.speak = function(text)
+  spoken = text
+end
 assert(vim.api.nvim_get_commands({}).TennantParent.definition == 'Read parent block')
 assert(vim.fn.maparg(',tl', 'x', false, true).desc == '[tennant] Read selection')
 -- Start a fresh notification history after checking backend warnings.

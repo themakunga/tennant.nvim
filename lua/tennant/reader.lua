@@ -56,8 +56,13 @@ M.block = function(parent)
   local cursor = vim.api.nvim_win_get_cursor(0)
   local tick = vim.api.nvim_buf_get_changedtick(buffer)
   local node
-  if parent and block_state and block_state.buffer == buffer
-      and block_state.tick == tick and vim.deep_equal(block_state.cursor, cursor) then
+  if
+    parent
+    and block_state
+    and block_state.buffer == buffer
+    and block_state.tick == tick
+    and vim.deep_equal(block_state.cursor, cursor)
+  then
     node = block_state.node
   else
     block_state = nil
