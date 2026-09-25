@@ -6,8 +6,9 @@ Use feature branches or forks and open pull requests against **develop**. Never 
 `main`. Only @themakunga reviews and merges contributions; only the automated
 `develop → main` promotion PR targets `main`. No automatic merging is enabled.
 Owner-authored PRs do not require self-approval. Other PRs require the owner's
-approval of the current commit. After approving a fork PR, comment `/recheck` if
-its policy status has not updated. Updating a PR invalidates the prior approval.
+approval of the current commit. After approving a PR, comment `/recheck` to refresh its policy status.
+Before the first promotion is merged, rerun the successful develop CI run instead;
+the default branch does not have the policy workflow yet. Updating a PR invalidates the prior approval.
 
 Python 3.12+, Git, Neovim 0.12.4 and LuaRocks are required. Install the development tools:
 
@@ -51,8 +52,9 @@ Trabaja en ramas de funcionalidad o forks y abre PR hacia **develop**. Solo
 @themakunga revisa y fusiona aportes. El bot mantiene un único PR `develop → main`;
 no se permite fusionarlo automáticamente ni enviar cambios directamente a main.
 Los PR del propietario no requieren autoaprobación. Los demás requieren su
-aprobación del commit actual; tras aprobar un fork, comenta `/recheck` si el estado
-no se actualiza. Cada cambio invalida la aprobación anterior.
+aprobación del commit actual; tras aprobar un PR, comenta `/recheck` para actualizar el estado.
+Antes de fusionar la primera promoción, vuelve a ejecutar CI de develop: el workflow
+de política aún no existe en la rama predeterminada. Cada cambio invalida la aprobación anterior.
 
 Instala las herramientas y ambos hooks con los comandos anteriores. Los controles
 se repiten en CI porque los hooks locales pueden omitirse. Añade una prueba de

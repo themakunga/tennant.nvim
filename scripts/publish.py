@@ -31,6 +31,12 @@ pr = prs[0] if prs else api('pulls', 'POST', {
     'body': 'Development integration. Review the CI report below. Only @themakunga may merge.',
 })
 number = pr['number']
+# This trusted develop push can also refresh policy before the initial main merge.
+review_pages = json.loads(subprocess.check_output(['gh', 'api', '--paginate', '--slurp', f'repos/{REPO}/pulls/{number}/reviews?per_page=100']))
+reviews = [r for page in review_pages for r in page if r['user']['login'] == 'themakunga' and r['state'] != 'COMMENTED']
+approved = pr['user']['login'] == 'themakunga' or bool(reviews and reviews[-1]['state'] == 'APPROVED' and reviews[-1]['commit_id'] == SHA)
+api(f'statuses/{SHA}', 'POST', {'context': 'Contribution policy', 'state': 'success' if approved else 'pending',
+    'description': 'Owner approval verified' if approved else 'Owner approval required; then /recheck or rerun this CI'})
 marker = '<!-- tennant-ci-report -->'
 jobs = api(f'actions/runs/{RUN}/jobs?per_page=100')['jobs']
 link = f'https://github.com/{REPO}/actions/runs/{RUN}'

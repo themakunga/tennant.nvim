@@ -94,6 +94,7 @@ jobs:
       contents: write
       pull-requests: write
       actions: read
+      statuses: write
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
