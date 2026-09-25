@@ -2,8 +2,12 @@
 vim.opt.rtp:prepend('.')
 local spoken, stopped = '', 0
 package.loaded['tennant.tts'] = {
-  speak = function(text) spoken = text end,
-  stop = function() stopped = stopped + 1 end,
+  speak = function(text)
+    spoken = text
+  end,
+  stop = function()
+    stopped = stopped + 1
+  end,
 }
 vim.notify = function() end
 local notify = require('tennant.notify')
@@ -15,7 +19,9 @@ vim.notify('first', vim.log.levels.INFO)
 vim.notify('second', vim.log.levels.WARN)
 local original = vim.api.nvim_get_current_buf()
 vim.keymap.set('n', 'n', '<Nop>', { buffer = original, desc = 'original n' })
-local function key(k) vim.api.nvim_feedkeys(k, 'xt', false) end
+local function key(k)
+  vim.api.nvim_feedkeys(k, 'xt', false)
+end
 notify.read_last()
 assert(spoken:find('Notificaciones: 2. información: first', 1, true))
 assert(spoken:find('Presiona n', 1, true))

@@ -1,6 +1,8 @@
 local M = { language = 'es' }
 
 local spanish = {
+  ['TTS process failed'] = 'El proceso TTS falló',
+  ['Unable to start TTS process'] = 'No se pudo iniciar el proceso TTS',
   ['Notifications: %d.'] = 'Notificaciones: %d.',
   ['Press n to continue or x to stop.'] = 'Presiona n para continuar o x para detener la lectura.',
   ['No more notifications. Press x to close.'] = 'No hay más notificaciones. Presiona x para cerrar.',

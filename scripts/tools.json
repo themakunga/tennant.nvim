@@ -1,0 +1,158 @@
+{
+  "nvim": {
+    "version": "v0.12.4",
+    "assets": {
+      "nvim-linux-arm64.tar.gz": {
+        "url": "https://github.com/neovim/neovim/releases/download/v0.12.4/nvim-linux-arm64.tar.gz",
+        "sha256": "ceb7e88c6b681f0515d135dcdfad54f5eb4373b25ce6172197cd9a69c758063f"
+      },
+      "nvim-linux-x86_64.tar.gz": {
+        "url": "https://github.com/neovim/neovim/releases/download/v0.12.4/nvim-linux-x86_64.tar.gz",
+        "sha256": "012bf3fcac5ade43914df3f174668bf64d05e049a4f032a388c027b1ebd78628"
+      },
+      "nvim-macos-arm64.tar.gz": {
+        "url": "https://github.com/neovim/neovim/releases/download/v0.12.4/nvim-macos-arm64.tar.gz",
+        "sha256": "51ab83afa66d663627c2ab1be43209b0f4e81360d4598b53efaa4d8195f24c89"
+      },
+      "nvim-macos-x86_64.tar.gz": {
+        "url": "https://github.com/neovim/neovim/releases/download/v0.12.4/nvim-macos-x86_64.tar.gz",
+        "sha256": "03fe16f8dd9f1e9eaf52d5e294913a39917b9e2faea30d7fb0fb385fbd36fe59"
+      },
+      "nvim-win-arm64.zip": {
+        "url": "https://github.com/neovim/neovim/releases/download/v0.12.4/nvim-win-arm64.zip",
+        "sha256": "49906085a3c473ee87a28319942c62216fb365a1a1a4f83dbc4ac41365f5e609"
+      },
+      "nvim-win64.zip": {
+        "url": "https://github.com/neovim/neovim/releases/download/v0.12.4/nvim-win64.zip",
+        "sha256": "9fc3572829ffd13debb6e32555da2c8cc02555568260a9fc4cf1f65bbcca319c"
+      }
+    }
+  },
+  "stylua": {
+    "version": "v2.5.2",
+    "assets": {
+      "stylua-linux-aarch64-musl.zip": {
+        "url": "https://github.com/JohnnyMorganz/StyLua/releases/download/v2.5.2/stylua-linux-aarch64-musl.zip",
+        "sha256": "b948df6b4bae41af9a70948174372f96a3c14d44e3e017288701539f3db8fb75"
+      },
+      "stylua-linux-aarch64.zip": {
+        "url": "https://github.com/JohnnyMorganz/StyLua/releases/download/v2.5.2/stylua-linux-aarch64.zip",
+        "sha256": "0ef2ebf0b7e5a652b65c4cb96c6d9ffb3981a98547de3c764465bbf54a8d761a"
+      },
+      "stylua-linux-x86_64-musl.zip": {
+        "url": "https://github.com/JohnnyMorganz/StyLua/releases/download/v2.5.2/stylua-linux-x86_64-musl.zip",
+        "sha256": "ca6f1cf52eaf69e6632b81acef9c197aa24b85eb30d2455a35e7dbe28ae77c72"
+      },
+      "stylua-linux-x86_64.zip": {
+        "url": "https://github.com/JohnnyMorganz/StyLua/releases/download/v2.5.2/stylua-linux-x86_64.zip",
+        "sha256": "bcb0d855e91f102f28a370e850f8566b3b44b79e6274d806ea5246837c0fd5ab"
+      },
+      "stylua-macos-aarch64.zip": {
+        "url": "https://github.com/JohnnyMorganz/StyLua/releases/download/v2.5.2/stylua-macos-aarch64.zip",
+        "sha256": "92ff0889e16324801bc072692974bb67f8161e62010fc90f96c62a17f81f32c7"
+      },
+      "stylua-macos-x86_64.zip": {
+        "url": "https://github.com/JohnnyMorganz/StyLua/releases/download/v2.5.2/stylua-macos-x86_64.zip",
+        "sha256": "53c50a1605d0a6345d160a1a5a21db40bcf2bf9cd23c17f7c277a63a1bff3a7f"
+      },
+      "stylua-windows-x86_64.zip": {
+        "url": "https://github.com/JohnnyMorganz/StyLua/releases/download/v2.5.2/stylua-windows-x86_64.zip",
+        "sha256": "e77d0ea1226b8b389b43f702240091249a96eea25857281f90ea24d0eb9eb969"
+      }
+    }
+  },
+  "actionlint": {
+    "version": "v1.7.12",
+    "assets": {
+      "actionlint_1.7.12_darwin_amd64.tar.gz": {
+        "url": "https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_darwin_amd64.tar.gz",
+        "sha256": "5b44c3bc2255115c9b69e30efc0fecdf498fdb63c5d58e17084fd5f16324c644"
+      },
+      "actionlint_1.7.12_darwin_arm64.tar.gz": {
+        "url": "https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_darwin_arm64.tar.gz",
+        "sha256": "aba9ced2dee8d27fecca3dc7feb1a7f9a52caefa1eb46f3271ea66b6e0e6953f"
+      },
+      "actionlint_1.7.12_freebsd_386.tar.gz": {
+        "url": "https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_freebsd_386.tar.gz",
+        "sha256": "7170cc3db006f83154583dc385c84bea3f6ee767a167bb9ca41de6593ebbb186"
+      },
+      "actionlint_1.7.12_freebsd_amd64.tar.gz": {
+        "url": "https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_freebsd_amd64.tar.gz",
+        "sha256": "3de1b027d0b749e81d6d972cbf5d14dc708a275248da1ba4eed4a9af707d1339"
+      },
+      "actionlint_1.7.12_linux_386.tar.gz": {
+        "url": "https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_386.tar.gz",
+        "sha256": "72a44b32c2d032700e6d0c23ca2f540b67519ec68db098ddfcfa96059e61f723"
+      },
+      "actionlint_1.7.12_linux_amd64.tar.gz": {
+        "url": "https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_amd64.tar.gz",
+        "sha256": "8aca8db96f1b94770f1b0d72b6dddcb1ebb8123cb3712530b08cc387b349a3d8"
+      },
+      "actionlint_1.7.12_linux_arm64.tar.gz": {
+        "url": "https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_arm64.tar.gz",
+        "sha256": "325e971b6ba9bfa504672e29be93c24981eeb1c07576d730e9f7c8805afff0c6"
+      },
+      "actionlint_1.7.12_linux_armv6.tar.gz": {
+        "url": "https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_linux_armv6.tar.gz",
+        "sha256": "ae4a0a5227578e66f5d00ee02788d5c64fdae1fa6484ab88ceaeee9359c28fa4"
+      },
+      "actionlint_1.7.12_windows_386.zip": {
+        "url": "https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_windows_386.zip",
+        "sha256": "cdc8643b2c8dc890c76ad16095da97e75f86572805cc3573cc13f31ea0f19127"
+      },
+      "actionlint_1.7.12_windows_amd64.zip": {
+        "url": "https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_windows_amd64.zip",
+        "sha256": "6e7241b51e6817ea6a047693d8e6fed13b31819c9a0dd6c5a726e1592d22f6e9"
+      },
+      "actionlint_1.7.12_windows_arm64.zip": {
+        "url": "https://github.com/rhysd/actionlint/releases/download/v1.7.12/actionlint_1.7.12_windows_arm64.zip",
+        "sha256": "cadcf7ea4efe3a68728893813643cebe1185e5b1d4be5b96245f65c9a4d5ea41"
+      }
+    }
+  },
+  "gitleaks": {
+    "version": "v8.30.1",
+    "assets": {
+      "gitleaks_8.30.1_darwin_arm64.tar.gz": {
+        "url": "https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_darwin_arm64.tar.gz",
+        "sha256": "b40ab0ae55c505963e365f271a8d3846efbc170aa17f2607f13df610a9aeb6a5"
+      },
+      "gitleaks_8.30.1_darwin_x64.tar.gz": {
+        "url": "https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_darwin_x64.tar.gz",
+        "sha256": "dfe101a4db2255fc85120ac7f3d25e4342c3c20cf749f2c20a18081af1952709"
+      },
+      "gitleaks_8.30.1_linux_arm64.tar.gz": {
+        "url": "https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_arm64.tar.gz",
+        "sha256": "e4a487ee7ccd7d3a7f7ec08657610aa3606637dab924210b3aee62570fb4b080"
+      },
+      "gitleaks_8.30.1_linux_armv6.tar.gz": {
+        "url": "https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_armv6.tar.gz",
+        "sha256": "5c2a4ee657a27614e10352bed2b8f1018ef9b05fc6c037cf737776bbe1255766"
+      },
+      "gitleaks_8.30.1_linux_armv7.tar.gz": {
+        "url": "https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_armv7.tar.gz",
+        "sha256": "8d39f0d94ba0d774b2282187656fb039a2d82893ec1fd6be7d7121aae759a57d"
+      },
+      "gitleaks_8.30.1_linux_x32.tar.gz": {
+        "url": "https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x32.tar.gz",
+        "sha256": "a87ba11adab22b4d6c6ea28b2da60f09154d5c2fdb44d4b07015d1e0433daecb"
+      },
+      "gitleaks_8.30.1_linux_x64.tar.gz": {
+        "url": "https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_linux_x64.tar.gz",
+        "sha256": "551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb"
+      },
+      "gitleaks_8.30.1_windows_arm64.zip": {
+        "url": "https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_windows_arm64.zip",
+        "sha256": "b95f5e4f5c425cedca7ee203d9afd29597e692c4924a12ed42f970537c72cc0f"
+      },
+      "gitleaks_8.30.1_windows_x32.zip": {
+        "url": "https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_windows_x32.zip",
+        "sha256": "190ad53db301eec3e90afe3a1a75270768b8ebf89e731345e19421c32c1ae1a1"
+      },
+      "gitleaks_8.30.1_windows_x64.zip": {
+        "url": "https://github.com/gitleaks/gitleaks/releases/download/v8.30.1/gitleaks_8.30.1_windows_x64.zip",
+        "sha256": "d29144deff3a68aa93ced33dddf84b7fdc26070add4aa0f4513094c8332afc4e"
+      }
+    }
+  }
+}

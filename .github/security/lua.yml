@@ -1,0 +1,25 @@
+rules:
+  - id: lua-shell-execution
+    languages: [generic]
+    severity: ERROR
+    message: Do not execute shell command strings; pass argv and stdin to vim.system.
+    patterns:
+      - pattern-either:
+          - pattern: os.execute(...)
+          - pattern: io.popen(...)
+          - pattern: vim.fn.system(...)
+          - pattern: vim.fn.systemlist(...)
+    paths:
+      include: ['*.lua']
+  - id: lua-dynamic-code
+    languages: [generic]
+    severity: ERROR
+    message: Do not evaluate externally supplied Lua code.
+    pattern-either:
+      - pattern: loadstring(...)
+      - pattern: load(...)
+  - id: lua-shell-argv
+    languages: [generic]
+    severity: ERROR
+    message: Shell argv execution must not be used for TTS.
+    pattern-regex: "['\"](?:sh|bash|cmd(?:\\.exe)?)['\"]\\s*,\\s*['\"](?:-c|/c)['\"]"

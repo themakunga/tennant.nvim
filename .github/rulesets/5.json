@@ -1,0 +1,24 @@
+{
+  "name": "Stable tags are immutable",
+  "target": "tag",
+  "enforcement": "active",
+  "conditions": {
+    "ref_name": {
+      "include": [
+        "refs/tags/v*"
+      ],
+      "exclude": [
+        "refs/tags/v*-pre-release.*"
+      ]
+    }
+  },
+  "bypass_actors": [],
+  "rules": [
+    {
+      "type": "update"
+    },
+    {
+      "type": "deletion"
+    }
+  ]
+}

@@ -3,7 +3,9 @@ vim.opt.rtp:prepend('.')
 local spoken
 package.loaded['tennant.tts'] = {
   backend = true,
-  speak = function(text) spoken = text end,
+  speak = function(text)
+    spoken = text
+  end,
 }
 require('tennant').setup({ prefix = ',t' })
 vim.api.nvim_buf_set_lines(0, 0, -1, false, { 'alpha', 'bravo', 'café' })

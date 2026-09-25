@@ -266,6 +266,12 @@ When Treesitter is available, `:TennantBlock` identifies and announces the block
 
 ---
 
+## Development / Desarrollo
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for hooks, tests, branch policy and daily
+pre-releases. Consulta esa guía para contribuir mediante PR hacia `develop`.
+Security reports / Reportes de seguridad: [SECURITY.md](SECURITY.md).
+
 ## License
 
 MIT

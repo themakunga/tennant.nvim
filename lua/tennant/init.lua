@@ -52,21 +52,33 @@ M.setup = function(opts)
   else
     vim.api.nvim_create_autocmd('VimEnter', {
       once = true,
-      callback = function() require('tennant.notify').intercept() end,
+      callback = function()
+        require('tennant.notify').intercept()
+      end,
     })
   end
 
   require('tennant.keymaps').setup(opts.prefix)
 
   -- User commands
-  vim.api.nvim_create_user_command('TennantWord',   function() require('tennant.reader').word() end,        { desc = translate('Read word') })
+  vim.api.nvim_create_user_command('TennantWord', function()
+    require('tennant.reader').word()
+  end, { desc = translate('Read word') })
   vim.api.nvim_create_user_command('TennantLine', function(args)
     require('tennant.reader').line(args.line1, args.line2)
   end, { range = true, desc = translate('Read current line or line range') })
-  vim.api.nvim_create_user_command('TennantBlock',  function() require('tennant.reader').block() end,       { desc = translate('Read block') })
-  vim.api.nvim_create_user_command('TennantParent', function() require('tennant.reader').block(true) end,   { desc = translate('Read parent block') })
-  vim.api.nvim_create_user_command('TennantNotify', function() require('tennant.notify').read_last() end,   { desc = translate('Read notifications') })
-  vim.api.nvim_create_user_command('TennantStop',   function() require('tennant.notify').cancel() end,           { desc = translate('Stop speaking') })
+  vim.api.nvim_create_user_command('TennantBlock', function()
+    require('tennant.reader').block()
+  end, { desc = translate('Read block') })
+  vim.api.nvim_create_user_command('TennantParent', function()
+    require('tennant.reader').block(true)
+  end, { desc = translate('Read parent block') })
+  vim.api.nvim_create_user_command('TennantNotify', function()
+    require('tennant.notify').read_last()
+  end, { desc = translate('Read notifications') })
+  vim.api.nvim_create_user_command('TennantStop', function()
+    require('tennant.notify').cancel()
+  end, { desc = translate('Stop speaking') })
 end
 
 return M

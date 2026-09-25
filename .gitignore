@@ -1,1 +1,6 @@
 .claude/
+nvim.log
+.tools/
+.venv/
+reports/
+__pycache__/
