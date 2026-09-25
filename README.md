@@ -109,7 +109,7 @@ Con el prefijo por defecto `<leader>tv`:
 | `<leader>tvl` (modo visual) | Leer el texto seleccionado (`v`, `V` o `Ctrl-v`) |
 | `<leader>tvb` | Leer el bloque completo más cercano (usa Treesitter si está disponible) |
 | `<leader>tvp` | Subir y leer el bloque contenedor |
-| `<leader>tvn` | Leer la última notificación |
+| `<leader>tvn` | Leer las notificaciones |
 | `<leader>tvs` | Detener la lectura |
 
 ### Comandos
@@ -120,10 +120,14 @@ Con el prefijo por defecto `<leader>tv`:
 | `:[rango]TennantLine` | Lee la línea actual o el rango indicado (por ejemplo, `:2,5TennantLine`) |
 | `:TennantBlock` | Lee el bloque completo más cercano |
 | `:TennantParent` | Sube y lee el bloque contenedor |
-| `:TennantNotify` | Lee la última notificación |
+| `:TennantNotify` | Lee las notificaciones |
 | `:TennantStop` | Detiene la lectura en curso |
 
 `<leader>tvb` inicia la lectura desde el bloque más cercano al cursor. Cada `<leader>tvp` sube un nivel hasta leer el archivo; después anuncia «No existen más niveles de anidación». Mover el cursor o editar el texto reinicia el recorrido desde la posición actual. Sin un parser de Treesitter, se lee la línea actual.
+
+### Lectura de notificaciones
+
+`<leader>tvn` o `:TennantNotify` abre una ventana temporal, anuncia el total de notificaciones capturadas durante la sesión y lee la primera, en orden de llegada. Presiona `n` para leer la siguiente y `x` para cancelar, detener la voz y cerrar la ventana. `Esc`, `:TennantStop` y `<leader>tvs` también cancelan. Al terminar, se anuncia que no hay más notificaciones; `x` cierra la ventana. Tus atajos habituales se conservan fuera de ella. Las notificaciones nuevas se incluyen al iniciar otro recorrido; el historial se conserva hasta cerrar Neovim.
 
 ### Bloques reconocidos por Treesitter
 
@@ -235,7 +239,7 @@ With the default prefix `<leader>tv`:
 | `<leader>tvl` (Visual mode) | Read selected text (`v`, `V`, or `Ctrl-v`) |
 | `<leader>tvb` | Read the full nearest block (uses Treesitter if available) |
 | `<leader>tvp` | Move up and read the enclosing block |
-| `<leader>tvn` | Read last notification |
+| `<leader>tvn` | Read notifications |
 | `<leader>tvs` | Stop speaking |
 
 ### Commands
@@ -246,10 +250,14 @@ With the default prefix `<leader>tv`:
 | `:[range]TennantLine` | Read current line or the given range (for example, `:2,5TennantLine`) |
 | `:TennantBlock` | Read the full nearest block |
 | `:TennantParent` | Move up and read the enclosing block |
-| `:TennantNotify` | Read last notification |
+| `:TennantNotify` | Read notifications |
 | `:TennantStop` | Stop current speech |
 
 `<leader>tvb` starts at the nearest block to the cursor. Each `<leader>tvp` moves up one level through the whole file, then announces “No more nesting levels” when configured in English. Moving the cursor or editing text restarts traversal from the current position. Without a Treesitter parser, reading falls back to the current line.
+
+### Reading notifications
+
+`<leader>tvn` or `:TennantNotify` opens a temporary window, announces the number of notifications captured during the session, and reads the first in arrival order. Press `n` for the next notification or `x` to cancel, stop speech, and close the window. `Esc`, `:TennantStop`, and `<leader>tvs` also cancel. The last notification announces the end; `x` closes the window. Your usual mappings remain intact outside it. New arrivals are included when starting another traversal; history is retained until Neovim exits.
 
 ### Treesitter block types
 

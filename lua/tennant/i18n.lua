@@ -1,6 +1,10 @@
 local M = { language = 'es' }
 
 local spanish = {
+  ['Notifications: %d.'] = 'Notificaciones: %d.',
+  ['Press n to continue or x to stop.'] = 'Presiona n para continuar o x para detener la lectura.',
+  ['No more notifications. Press x to close.'] = 'No hay más notificaciones. Presiona x para cerrar.',
+  ['Read notifications'] = 'Leer notificaciones',
   ['Requires Neovim >= 0.12 (found %s)'] = 'Requiere Neovim >= 0.12 (tienes %s)',
   ['No TTS backend found.'] = 'No se encontró backend TTS.',
   ['Install one of: spd-say, espeak-ng, espeak, festival'] = 'Instala uno de: spd-say, espeak-ng, espeak, festival',

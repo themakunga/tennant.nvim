@@ -47,12 +47,14 @@ M.setup = function(opts)
   check_treesitter()
 
   -- Intercept vim.notify after plugins have loaded
-  vim.api.nvim_create_autocmd('VimEnter', {
-    once = true,
-    callback = function()
-      require('tennant.notify').intercept()
-    end,
-  })
+  if vim.v.vim_did_enter == 1 then
+    require('tennant.notify').intercept()
+  else
+    vim.api.nvim_create_autocmd('VimEnter', {
+      once = true,
+      callback = function() require('tennant.notify').intercept() end,
+    })
+  end
 
   require('tennant.keymaps').setup(opts.prefix)
 
@@ -63,8 +65,8 @@ M.setup = function(opts)
   end, { range = true, desc = translate('Read current line or line range') })
   vim.api.nvim_create_user_command('TennantBlock',  function() require('tennant.reader').block() end,       { desc = translate('Read block') })
   vim.api.nvim_create_user_command('TennantParent', function() require('tennant.reader').block(true) end,   { desc = translate('Read parent block') })
-  vim.api.nvim_create_user_command('TennantNotify', function() require('tennant.notify').read_last() end,   { desc = translate('Read last notification') })
-  vim.api.nvim_create_user_command('TennantStop',   function() require('tennant.tts').stop() end,           { desc = translate('Stop speaking') })
+  vim.api.nvim_create_user_command('TennantNotify', function() require('tennant.notify').read_last() end,   { desc = translate('Read notifications') })
+  vim.api.nvim_create_user_command('TennantStop',   function() require('tennant.notify').cancel() end,           { desc = translate('Stop speaking') })
 end
 
 return M

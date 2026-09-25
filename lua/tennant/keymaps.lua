@@ -12,8 +12,8 @@ M.setup = function(prefix)
     { prefix .. 'l', function() require('tennant.reader').line() end,         'Read current line or line range' },
     { prefix .. 'b', function() require('tennant.reader').block() end,        'Read block' },
     { prefix .. 'p', function() require('tennant.reader').block(true) end,    'Read parent block' },
-    { prefix .. 'n', function() require('tennant.notify').read_last() end,    'Read last notification' },
-    { prefix .. 's', function() require('tennant.tts').stop() end,            'Stop speaking' },
+    { prefix .. 'n', function() require('tennant.notify').read_last() end,    'Read notifications' },
+    { prefix .. 's', function() require('tennant.notify').cancel() end,            'Stop speaking' },
   }
 
   for _, m in ipairs(maps) do

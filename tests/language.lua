@@ -11,17 +11,19 @@ assert(notice == '[tennant] No TTS backend available')
 tts.speak = function(text) spoken = text end
 assert(vim.api.nvim_get_commands({}).TennantParent.definition == 'Read parent block')
 assert(vim.fn.maparg(',tl', 'x', false, true).desc == '[tennant] Read selection')
+-- Start a fresh notification history after checking backend warnings.
+package.loaded['tennant.notify'] = nil
 local notify = require('tennant.notify')
 notify.read_last()
 assert(spoken == 'No recent notifications')
 notify.intercept()
 vim.notify('Original message', vim.log.levels.WARN)
 notify.read_last()
-assert(spoken == 'warning: Original message')
+assert(spoken:find('Notifications: 1. warning: Original message', 1, true))
 tts.backend = true
 require('tennant').setup({ language = 'es', prefix = ',t' })
 notify.read_last()
-assert(spoken == 'advertencia: Original message')
+assert(spoken:find('Notificaciones: 1. advertencia: Original message', 1, true))
 assert(vim.api.nvim_get_commands({}).TennantParent.definition == 'Leer bloque contenedor')
 local i18n = require('tennant.i18n')
 assert(not pcall(require('tennant').setup, { language = 'fr' }))
