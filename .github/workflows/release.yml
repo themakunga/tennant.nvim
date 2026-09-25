@@ -22,6 +22,14 @@ jobs:
         run: |
           [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]
           git merge-base --is-ancestor HEAD origin/main
+      - name: Require successful CI for the tagged commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          commit=$(git rev-parse HEAD)
+          gh api "repos/$GITHUB_REPOSITORY/commits/$commit/check-runs" \
+            --jq 'any(.check_runs[]; .name == "CI required" and .app.slug == "github-actions" and .conclusion == "success")' \
+            | grep -qx true
       - name: Publish stable release
         env:
           GH_TOKEN: ${{ github.token }}

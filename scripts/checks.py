@@ -5,6 +5,7 @@ from pathlib import Path
 import subprocess
 
 commands = {
+    'tool-regressions': ['python3', 'tests/tooling.py'],
     'hooks': ['pre-commit', 'run', '--all-files', '--hook-stage', 'pre-commit'],
     'secrets-history': ['gitleaks', 'git', '--redact', '--no-banner', '--report-format', 'json',
                         '--report-path', 'reports/secrets.json'],
