@@ -1,0 +1,120 @@
+name: Release Pipeline (Validation, Build, Publish, PR)
+on:
+  push:
+    branches:
+      - 'release/v*'
+permissions:
+  contents: read
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  validate:
+    name: Validate & Quality
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+      - name: Install tools
+        run: |
+          python -m pip install -r scripts/requirements-ci.txt
+          python scripts/install-tools.py stylua actionlint gitleaks
+          sudo apt-get update -qq
+          sudo apt-get install -y luarocks
+          sudo luarocks install luacheck 1.2.0
+      - name: Run all checks
+        run: python scripts/checks.py
+      - name: Validate VERSION matches branch
+        run: |
+          BRANCH="${GITHUB_REF#refs/heads/release/}"
+          FILE_VERSION="v$(tr -d '[:space:]' < VERSION)"
+          if [ "$BRANCH" != "$FILE_VERSION" ]; then
+            echo "Branch '$BRANCH' does not match VERSION file ('$FILE_VERSION'). Update VERSION before pushing."
+            exit 1
+          fi
+
+  e2e:
+    name: E2E (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, macos-14, windows-2022]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.12'
+      - name: Install pinned Neovim
+        run: python scripts/install-tools.py nvim
+      - name: Run tests
+        shell: bash
+        run: |
+          mkdir -p reports
+          set -o pipefail
+          python scripts/test.py 2>&1 | tee reports/e2e.log
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: always()
+        with:
+          name: e2e-${{ matrix.os }}
+          path: reports/
+          retention-days: 7
+
+  publish:
+    name: Publish Release & Create PR
+    needs: [validate, e2e]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Build release assets
+        run: |
+          VERSION="v$(tr -d '[:space:]' < VERSION)"
+          mkdir -p dist
+          git archive --format=tar.gz --prefix=tennant.nvim/ --output="dist/tennant.nvim-${VERSION}.tar.gz" HEAD
+          git archive --format=zip     --prefix=tennant.nvim/ --output="dist/tennant.nvim-${VERSION}.zip"    HEAD
+          sha256sum dist/tennant.nvim-"${VERSION}".tar.gz dist/tennant.nvim-"${VERSION}".zip > dist/SHA256SUMS
+      - name: Publish pre-release & create PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          VERSION="v$(tr -d '[:space:]' < VERSION)"
+          BRANCH="${GITHUB_REF#refs/heads/}"
+
+          echo "Publishing pre-release $VERSION..."
+          if gh release view "$VERSION" &>/dev/null; then
+            echo "Release $VERSION already exists — updating artifacts."
+            gh release upload "$VERSION" dist/* --clobber
+          else
+            gh release create "$VERSION" dist/* \
+              --title "Release $VERSION" \
+              --generate-notes \
+              --prerelease \
+              --target "$GITHUB_SHA"
+          fi
+
+          echo "Ensuring PR to main..."
+          PR_COUNT=$(gh pr list --head "$BRANCH" --base main --json id --jq 'length')
+          if [ "$PR_COUNT" -eq "0" ]; then
+            gh pr create \
+              --base main \
+              --head "$BRANCH" \
+              --title "Release $VERSION" \
+              --body "Production release $VERSION. All checks passed and pre-release published. Only @themakunga may merge."
+          else
+            echo "PR already exists — skipping."
+          fi

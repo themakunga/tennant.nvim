@@ -34,4 +34,10 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: ${{ github.ref_name }}
-        run: gh release create "$TAG" --verify-tag --generate-notes --latest
+        run: |
+          if gh release view "$TAG" &>/dev/null; then
+            echo "Pre-release exists — promoting to stable."
+            gh release edit "$TAG" --prerelease=false --latest
+          else
+            gh release create "$TAG" --verify-tag --generate-notes --latest
+          fi
