@@ -103,7 +103,9 @@ Con el prefijo por defecto `<leader>tv`:
 |-------|--------|
 | `<leader>tvw` | Leer la palabra bajo el cursor |
 | `<leader>tvl` | Leer la línea actual |
-| `<leader>tvb` | Leer el bloque actual (usa Treesitter si está disponible) |
+| `<leader>tvl` (modo visual) | Leer el texto seleccionado (`v`, `V` o `Ctrl-v`) |
+| `<leader>tvb` | Leer el bloque completo más cercano (usa Treesitter si está disponible) |
+| `<leader>tvp` | Subir y leer el bloque contenedor |
 | `<leader>tvn` | Leer la última notificación |
 | `<leader>tvs` | Detener la lectura |
 
@@ -112,10 +114,13 @@ Con el prefijo por defecto `<leader>tv`:
 | Comando | Descripción |
 |---------|-------------|
 | `:TennantWord` | Lee la palabra bajo el cursor |
-| `:TennantLine` | Lee la línea actual |
-| `:TennantBlock` | Lee el bloque actual |
+| `:[rango]TennantLine` | Lee la línea actual o el rango indicado (por ejemplo, `:2,5TennantLine`) |
+| `:TennantBlock` | Lee el bloque completo más cercano |
+| `:TennantParent` | Sube y lee el bloque contenedor |
 | `:TennantNotify` | Lee la última notificación |
 | `:TennantStop` | Detiene la lectura en curso |
+
+`<leader>tvb` inicia la lectura desde el bloque más cercano al cursor. Cada `<leader>tvp` sube un nivel hasta leer el archivo; después anuncia «No existen más niveles de anidación». Mover el cursor o editar el texto reinicia el recorrido desde la posición actual. Sin un parser de Treesitter, se lee la línea actual.
 
 ### Bloques reconocidos por Treesitter
 
@@ -221,7 +226,9 @@ With the default prefix `<leader>tv`:
 |-----|--------|
 | `<leader>tvw` | Read word under cursor |
 | `<leader>tvl` | Read current line |
-| `<leader>tvb` | Read current block (uses Treesitter if available) |
+| `<leader>tvl` (Visual mode) | Read selected text (`v`, `V`, or `Ctrl-v`) |
+| `<leader>tvb` | Read the full nearest block (uses Treesitter if available) |
+| `<leader>tvp` | Move up and read the enclosing block |
 | `<leader>tvn` | Read last notification |
 | `<leader>tvs` | Stop speaking |
 
@@ -230,10 +237,13 @@ With the default prefix `<leader>tv`:
 | Command | Description |
 |---------|-------------|
 | `:TennantWord` | Read word under cursor |
-| `:TennantLine` | Read current line |
-| `:TennantBlock` | Read current block |
+| `:[range]TennantLine` | Read current line or the given range (for example, `:2,5TennantLine`) |
+| `:TennantBlock` | Read the full nearest block |
+| `:TennantParent` | Move up and read the enclosing block |
 | `:TennantNotify` | Read last notification |
 | `:TennantStop` | Stop current speech |
+
+`<leader>tvb` starts at the nearest block to the cursor. Each `<leader>tvp` moves up one level through the whole file, then announces “No existen más niveles de anidación” (no more nesting levels). Moving the cursor or editing text restarts traversal from the current position. Without a Treesitter parser, reading falls back to the current line.
 
 ### Treesitter block types
 

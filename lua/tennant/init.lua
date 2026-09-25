@@ -57,8 +57,11 @@ M.setup = function(opts)
 
   -- User commands
   vim.api.nvim_create_user_command('TennantWord',   function() require('tennant.reader').word() end,        { desc = 'Leer palabra bajo el cursor' })
-  vim.api.nvim_create_user_command('TennantLine',   function() require('tennant.reader').line() end,        { desc = 'Leer línea actual' })
+  vim.api.nvim_create_user_command('TennantLine', function(args)
+    require('tennant.reader').line(args.line1, args.line2)
+  end, { range = true, desc = 'Read current line or line range' })
   vim.api.nvim_create_user_command('TennantBlock',  function() require('tennant.reader').block() end,       { desc = 'Leer bloque actual' })
+  vim.api.nvim_create_user_command('TennantParent', function() require('tennant.reader').block(true) end,   { desc = 'Read parent block' })
   vim.api.nvim_create_user_command('TennantNotify', function() require('tennant.notify').read_last() end,   { desc = 'Leer última notificación' })
   vim.api.nvim_create_user_command('TennantStop',   function() require('tennant.tts').stop() end,           { desc = 'Detener lectura' })
 end
