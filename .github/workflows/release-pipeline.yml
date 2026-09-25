@@ -32,7 +32,7 @@ jobs:
       - name: Validate VERSION matches branch
         run: |
           BRANCH="${GITHUB_REF#refs/heads/release/}"
-          FILE_VERSION="v$(cat VERSION | tr -d '[:space:]')"
+          FILE_VERSION="v$(tr -d '[:space:]' < VERSION)"
           if [ "$BRANCH" != "$FILE_VERSION" ]; then
             echo "Branch '$BRANCH' does not match VERSION file ('$FILE_VERSION'). Update VERSION before pushing."
             exit 1
@@ -83,7 +83,7 @@ jobs:
           persist-credentials: false
       - name: Build release assets
         run: |
-          VERSION="v$(cat VERSION | tr -d '[:space:]')"
+          VERSION="v$(tr -d '[:space:]' < VERSION)"
           mkdir -p dist
           git archive --format=tar.gz --prefix=tennant.nvim/ --output="dist/tennant.nvim-${VERSION}.tar.gz" HEAD
           git archive --format=zip     --prefix=tennant.nvim/ --output="dist/tennant.nvim-${VERSION}.zip"    HEAD
@@ -92,7 +92,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          VERSION="v$(cat VERSION | tr -d '[:space:]')"
+          VERSION="v$(tr -d '[:space:]' < VERSION)"
           BRANCH="${GITHUB_REF#refs/heads/}"
 
           echo "Publishing pre-release $VERSION..."
