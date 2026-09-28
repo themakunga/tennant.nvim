@@ -1,138 +1,9 @@
 # tennant.nvim
 
-> **Text-to-Speech for Neovim** — lee en voz alta palabras, líneas, bloques y notificaciones usando el motor TTS nativo de tu sistema operativo.
->
-> **Text-to-Speech for Neovim** — reads aloud words, lines, blocks and notifications using your OS's native TTS engine.
-
----
-
-## Español
-
-### ¿Qué es?
-
-`tennant.nvim` es un plugin de Neovim que convierte texto en voz usando el motor TTS nativo de cada sistema operativo: `say` en macOS, PowerShell en Windows y `spd-say` / `espeak-ng` / `espeak` / `festival` en Linux. No requiere dependencias externas de Lua ni APIs de pago.
-
-### Requisitos
-
-| Plataforma | Requisito |
-|------------|-----------|
-| **macOS** | `say` (incluido en el sistema) |
-| **Linux** | `spd-say`, `espeak-ng`, `espeak` o `festival` (cualquiera) |
-| **Windows** | PowerShell + .NET Framework (incluido en Windows) |
-| **Neovim** | >= 0.12 |
-| **Treesitter** | Opcional — mejora la lectura de bloques por tipo |
-
-### Instalación
-
-#### lazy.nvim (recomendado)
-
-```lua
-{
-  'themakunga/tennant.nvim',
-  event = 'VeryLazy',
-  opts = {
-    -- prefix = '<leader>tv', -- prefijo por defecto
-  },
-}
-```
-
-#### packer.nvim
-
-```lua
-use {
-  'themakunga/tennant.nvim',
-  config = function()
-    require('tennant').setup()
-  end,
-}
-```
-
-#### vim-plug
-
-```vim
-Plug 'themakunga/tennant.nvim'
-```
-
-Luego en tu config:
-
-```lua
-require('tennant').setup()
-```
-
-#### vim packages (`:h packages`)
-
-```bash
-mkdir -p ~/.local/share/nvim/site/pack/plugins/start
-git clone https://github.com/themakunga/tennant.nvim \
-  ~/.local/share/nvim/site/pack/plugins/start/tennant.nvim
-```
-
-Agrega en tu `init.lua`:
-
-```lua
-require('tennant').setup()
-```
-
-#### rocks.nvim
-
-```lua
--- en tu rocks.toml
-[plugins]
-"tennant.nvim" = "scm"
-```
-
-O en tu config:
-
-```lua
-require('rocks').install('tennant.nvim')
-```
-
-### Configuración
-
-```lua
-require('tennant').setup({
-  prefix = '<leader>tv',
-  language = 'es', -- 'es' (default) or 'en'
-})
-```
-
-`language` cambia los avisos, las etiquetas leídas y las descripciones de comandos y atajos. El contenido del archivo y las notificaciones externas se leen sin traducir. La voz y pronunciación dependen de la configuración del motor TTS del sistema; selecciona una voz inglesa en ese motor para leer inglés.
-
-### Atajos de teclado
-
-Con el prefijo por defecto `<leader>tv`:
-
-| Atajo | Acción |
-|-------|--------|
-| `<leader>tvw` | Leer la palabra bajo el cursor |
-| `<leader>tvl` | Leer la línea actual |
-| `<leader>tvl` (modo visual) | Leer el texto seleccionado (`v`, `V` o `Ctrl-v`) |
-| `<leader>tvb` | Leer el bloque completo más cercano (usa Treesitter si está disponible) |
-| `<leader>tvp` | Subir y leer el bloque contenedor |
-| `<leader>tvn` | Leer las notificaciones |
-| `<leader>tvs` | Detener la lectura |
-
-### Comandos
-
-| Comando | Descripción |
-|---------|-------------|
-| `:TennantWord` | Lee la palabra bajo el cursor |
-| `:[rango]TennantLine` | Lee la línea actual o el rango indicado (por ejemplo, `:2,5TennantLine`) |
-| `:TennantBlock` | Lee el bloque completo más cercano |
-| `:TennantParent` | Sube y lee el bloque contenedor |
-| `:TennantNotify` | Lee las notificaciones |
-| `:TennantStop` | Detiene la lectura en curso |
-
-`<leader>tvb` inicia la lectura desde el bloque más cercano al cursor. Cada `<leader>tvp` sube un nivel hasta leer el archivo; después anuncia «No existen más niveles de anidación». Mover el cursor o editar el texto reinicia el recorrido desde la posición actual. Sin un parser de Treesitter, se lee la línea actual.
-
-### Lectura de notificaciones
-
-`<leader>tvn` o `:TennantNotify` abre una ventana temporal, anuncia el total de notificaciones capturadas durante la sesión y lee la primera, en orden de llegada. Presiona `n` para leer la siguiente y `x` para cancelar, detener la voz y cerrar la ventana. `Esc`, `:TennantStop` y `<leader>tvs` también cancelan. Al terminar, se anuncia que no hay más notificaciones; `x` cierra la ventana. Tus atajos habituales se conservan fuera de ella. Las notificaciones nuevas se incluyen al iniciar otro recorrido; el historial se conserva hasta cerrar Neovim.
-
-### Bloques reconocidos por Treesitter
-
-Cuando Treesitter está disponible, `:TennantBlock` identifica y anuncia el tipo de bloque:
-`función`, `método`, `función flecha`, `variable`, `constante`, `clase`, `bloque if`, `bucle for`, `bucle while`, `bloque try`, `retorno`, `importación`, `exportación`.
+[![CI](https://github.com/themakunga/tennant.nvim/actions/workflows/ci.yml/badge.svg)](https://github.com/themakunga/tennant.nvim/actions/workflows/ci.yml)
+![Neovim 0.12+](https://img.shields.io/badge/Neovim-0.12%2B-57A143?logo=neovim)
+![macOS · Linux · Windows](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-blue)
+[![MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 ---
 
@@ -153,6 +24,15 @@ Cuando Treesitter está disponible, `:TennantBlock` identifica y anuncia el tipo
 | **Treesitter** | Optional — improves block reading by type |
 
 ### Installation
+
+#### vim.pack.add (Neovim >= 0.12)
+
+Add this to your `init.lua`:
+
+```lua
+vim.pack.add({ 'https://github.com/themakunga/tennant.nvim' })
+require('tennant').setup()
+```
 
 #### lazy.nvim (recommended)
 
@@ -205,8 +85,8 @@ require('tennant').setup()
 
 #### rocks.nvim
 
-```lua
--- in your rocks.toml
+```toml
+# in your rocks.toml
 [plugins]
 "tennant.nvim" = "scm"
 ```
@@ -223,10 +103,15 @@ require('rocks').install('tennant.nvim')
 require('tennant').setup({
   prefix = '<leader>tv',
   language = 'en', -- 'es' (default) or 'en'
+  tts = {
+    -- backend = 'espeak-ng', -- optional; choose an installed engine
+    -- voice = 'en', -- voice name for the chosen engine
+    -- rate = 190, -- units and range depend on the engine
+  },
 })
 ```
 
-Set `language = 'en'` for English announcements, spoken labels, and command/keymap descriptions. Spanish (`'es'`) remains the default. File contents and external notifications are read without translation. Voice and pronunciation follow your system TTS configuration; select an English voice in that engine for English speech.
+Set `language = 'en'` for English announcements, spoken labels, and command/keymap descriptions. Spanish (`'es'`) remains the default. File contents and external notifications are read without translation. `tts.voice` selects an installed voice; `language` does not automatically change it. See the [options table](#options--opciones) at the end.
 
 ### Keymaps
 
@@ -266,12 +151,182 @@ When Treesitter is available, `:TennantBlock` identifies and announces the block
 
 ---
 
+## Español
+
+### ¿Qué es?
+
+`tennant.nvim` es un plugin de Neovim que convierte texto en voz usando el motor TTS nativo de cada sistema operativo: `say` en macOS, PowerShell en Windows y `spd-say` / `espeak-ng` / `espeak` / `festival` en Linux. No requiere dependencias externas de Lua ni APIs de pago.
+
+### Requisitos
+
+| Plataforma | Requisito |
+|------------|-----------|
+| **macOS** | `say` (incluido en el sistema) |
+| **Linux** | `spd-say`, `espeak-ng`, `espeak` o `festival` (cualquiera) |
+| **Windows** | PowerShell + .NET Framework (incluido en Windows) |
+| **Neovim** | >= 0.12 |
+| **Treesitter** | Opcional — mejora la lectura de bloques por tipo |
+
+### Instalación
+
+#### vim.pack.add (Neovim >= 0.12)
+
+Agrega esto a tu `init.lua`:
+
+```lua
+vim.pack.add({ 'https://github.com/themakunga/tennant.nvim' })
+require('tennant').setup()
+```
+
+#### lazy.nvim (recomendado)
+
+```lua
+{
+  'themakunga/tennant.nvim',
+  event = 'VeryLazy',
+  opts = {
+    -- prefix = '<leader>tv', -- prefijo por defecto
+  },
+}
+```
+
+#### packer.nvim
+
+```lua
+use {
+  'themakunga/tennant.nvim',
+  config = function()
+    require('tennant').setup()
+  end,
+}
+```
+
+#### vim-plug
+
+```vim
+Plug 'themakunga/tennant.nvim'
+```
+
+Luego en tu config:
+
+```lua
+require('tennant').setup()
+```
+
+#### vim packages (`:h packages`)
+
+```bash
+mkdir -p ~/.local/share/nvim/site/pack/plugins/start
+git clone https://github.com/themakunga/tennant.nvim \
+  ~/.local/share/nvim/site/pack/plugins/start/tennant.nvim
+```
+
+Agrega en tu `init.lua`:
+
+```lua
+require('tennant').setup()
+```
+
+#### rocks.nvim
+
+```toml
+# en tu rocks.toml
+[plugins]
+"tennant.nvim" = "scm"
+```
+
+O en tu config:
+
+```lua
+require('rocks').install('tennant.nvim')
+```
+
+### Configuración
+
+```lua
+require('tennant').setup({
+  prefix = '<leader>tv',
+  language = 'es', -- 'es' (predeterminado) o 'en'
+  tts = {
+    -- backend = 'espeak-ng', -- opcional; fuerza un motor instalado
+    -- voice = 'es', -- nombre de voz del motor seleccionado
+    -- rate = 190, -- unidad y rango dependen del motor
+  },
+})
+```
+
+`language` cambia los avisos, las etiquetas leídas y las descripciones de comandos y atajos. El contenido del archivo y las notificaciones externas se leen sin traducir. `tts.voice` selecciona una voz instalada; `language` no cambia la voz automáticamente. Consulta la [tabla de opciones](#options--opciones) al final.
+
+### Atajos de teclado
+
+Con el prefijo por defecto `<leader>tv`:
+
+| Atajo | Acción |
+|-------|--------|
+| `<leader>tvw` | Leer la palabra bajo el cursor |
+| `<leader>tvl` | Leer la línea actual |
+| `<leader>tvl` (modo visual) | Leer el texto seleccionado (`v`, `V` o `Ctrl-v`) |
+| `<leader>tvb` | Leer el bloque completo más cercano (usa Treesitter si está disponible) |
+| `<leader>tvp` | Subir y leer el bloque contenedor |
+| `<leader>tvn` | Leer las notificaciones |
+| `<leader>tvs` | Detener la lectura |
+
+### Comandos
+
+| Comando | Descripción |
+|---------|-------------|
+| `:TennantWord` | Lee la palabra bajo el cursor |
+| `:[rango]TennantLine` | Lee la línea actual o el rango indicado (por ejemplo, `:2,5TennantLine`) |
+| `:TennantBlock` | Lee el bloque completo más cercano |
+| `:TennantParent` | Sube y lee el bloque contenedor |
+| `:TennantNotify` | Lee las notificaciones |
+| `:TennantStop` | Detiene la lectura en curso |
+
+`<leader>tvb` inicia la lectura desde el bloque más cercano al cursor. Cada `<leader>tvp` sube un nivel hasta leer el archivo; después anuncia «No existen más niveles de anidación». Mover el cursor o editar el texto reinicia el recorrido desde la posición actual. Sin un parser de Treesitter, se lee la línea actual.
+
+### Lectura de notificaciones
+
+`<leader>tvn` o `:TennantNotify` abre una ventana temporal, anuncia el total de notificaciones capturadas durante la sesión y lee la primera, en orden de llegada. Presiona `n` para leer la siguiente y `x` para cancelar, detener la voz y cerrar la ventana. `Esc`, `:TennantStop` y `<leader>tvs` también cancelan. Al terminar, se anuncia que no hay más notificaciones; `x` cierra la ventana. Tus atajos habituales se conservan fuera de ella. Las notificaciones nuevas se incluyen al iniciar otro recorrido; el historial se conserva hasta cerrar Neovim.
+
+### Bloques reconocidos por Treesitter
+
+Cuando Treesitter está disponible, `:TennantBlock` identifica y anuncia el tipo de bloque:
+`función`, `método`, `función flecha`, `variable`, `constante`, `clase`, `bloque if`, `bucle for`, `bucle while`, `bloque try`, `retorno`, `importación`, `exportación`.
+
+---
+
 ## Development / Desarrollo
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for hooks, tests, branch policy and daily
-pre-releases. Consulta esa guía para contribuir mediante PR hacia `develop`.
+pre-releases. Consulta esa guía para contribuir mediante PR hacia `main`.
 Security reports / Reportes de seguridad: [SECURITY.md](SECURITY.md).
 
 ## License
 
 MIT
+
+## Options / Opciones
+
+`require('tennant').setup({ ... })` accepts / acepta:
+
+| Option / Opción | Default / Predeterminado | Description / Descripción |
+|-----------------|---------------------------|---------------------------|
+| `prefix` | `'<leader>tv'` | Keymap prefix / Prefijo de atajos. |
+| `language` | `'es'` | Announcements and labels: `'es'` or `'en'` / Avisos y etiquetas: `'es'` o `'en'`. |
+| `tts.backend` | Auto-detected / Autodetectado | `'say'` (macOS), `'powershell'` (Windows), `'spd-say'`, `'espeak-ng'`, `'espeak'` or / o `'festival'` (Linux). The chosen engine must be available / El motor indicado debe estar disponible. |
+| `tts.voice` | System default / Voz del sistema | Name of an installed voice / Nombre de una voz instalada. Unavailable with / No disponible con `festival`. |
+| `tts.rate` | Engine default / Predeterminado del motor | Speed; units and ranges below / Velocidad; unidades y rangos en la tabla siguiente. |
+| `tts.pitch` | Engine default / Predeterminado del motor | Pitch / Tono; supported by / compatible con `spd-say`, `espeak-ng`, `espeak`. |
+| `tts.volume` | Engine default / Predeterminado del motor | Volume or amplitude / Volumen o amplitud; supported by / compatible con Windows, `spd-say`, `espeak-ng`, `espeak`. |
+
+| Engine / Motor | `tts.voice` | `tts.rate` | `tts.pitch` | `tts.volume` |
+|---------------|-------------|------------|-------------|--------------|
+| macOS `say` | Voice from `say -v '?'` / Voz de `say -v '?'` | Words per minute, integer ≥ 1 / Palabras por minuto, entero ≥ 1 | — | — |
+| Windows PowerShell | Installed voice name / Nombre de voz instalada | Integer / Entero −10…10 | — | Integer / Entero 0…100 |
+| Linux `spd-say` | Synthesis voice (`spd-say -L`) / Voz de síntesis (`spd-say -L`) | Integer / Entero −100…100 | Integer / Entero −100…100 | Integer / Entero −100…100 |
+| Linux `espeak-ng`, `espeak` | Voice from `--voices` / Voz de `--voices` | Words per minute, integer ≥ 1 / Palabras por minuto, entero ≥ 1 | Integer / Entero 0…99 | Amplitude, integer / Amplitud, entero 0…200 |
+| Linux `festival` | — | — | — | — |
+
+**English:** On Linux, the first available engine is selected in this order: `spd-say`, `espeak-ng`, `espeak`, `festival`. Use `tts.backend` to choose another. All `tts` options are optional; an out-of-range value, unavailable engine, or option unsupported by the chosen engine raises a configuration error. Voice names and speed units depend on the engine. Example: `tts = { backend = 'espeak-ng', voice = 'en', rate = 190, pitch = 55 }`.
+
+**Español:** En Linux, el primer motor disponible se elige en este orden: `spd-say`, `espeak-ng`, `espeak`, `festival`. Usa `tts.backend` para elegir otro. Todas las opciones de `tts` son opcionales; un valor fuera de rango, un motor inexistente o una opción que no admita el motor produce un error de configuración. El nombre de voz y las unidades de velocidad dependen del motor. Ejemplo: `tts = { backend = 'espeak-ng', voice = 'es', rate = 190, pitch = 55 }`.
