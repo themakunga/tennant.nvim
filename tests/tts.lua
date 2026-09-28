@@ -38,7 +38,53 @@ for _, backend in ipairs({ 'Darwin', 'Windows_NT', 'spd-say', 'espeak-ng', 'espe
   vim.wait(20)
   tts.stop()
   assert(jobs[#jobs].killed, 'Old completion must not lose the replacement process')
+
+  if backend ~= 'festival' then
+    local configured = backend == 'Darwin' and { voice = 'Samantha', rate = 210 }
+      or backend == 'Windows_NT' and { voice = 'Microsoft Zira Desktop', rate = -2, volume = 80 }
+      or backend == 'spd-say' and { voice = 'en_US', rate = -20, pitch = 10, volume = 30 }
+      or { voice = 'en+f3', rate = 190, pitch = 60, volume = 120 }
+    tts.setup(configured)
+    tts.speak(payload)
+    call = calls[#calls]
+    if backend == 'Windows_NT' then
+      assert(call.options.env.TENNANT_TTS_VOICE == configured.voice)
+      assert(call.options.env.TENNANT_TTS_RATE == '-2')
+      assert(call.options.env.TENNANT_TTS_VOLUME == '80')
+      assert(not table.concat(call.command, ' '):find(configured.voice, 1, true))
+    else
+      assert(vim.tbl_contains(call.command, configured.voice))
+      assert(vim.tbl_contains(call.command, tostring(configured.rate)))
+      if configured.pitch then
+        assert(vim.tbl_contains(call.command, tostring(configured.pitch)))
+        assert(vim.tbl_contains(call.command, tostring(configured.volume)))
+      end
+      if backend == 'spd-say' then
+        assert(call.command[#call.command - 1] == '--' and call.command[#call.command] == payload)
+      else
+        assert(call.options.stdin == payload)
+      end
+    end
+    assert(not pcall(tts.setup, { voice = '-malformed' }))
+    assert(not pcall(tts.setup, { rate = -99999 }))
+    tts.stop()
+  else
+    assert(not pcall(tts.setup, { voice = 'anything' }))
+  end
 end
+vim.uv.os_uname = function()
+  return { sysname = 'Linux' }
+end
+vim.fn.executable = function(bin)
+  return (bin == 'spd-say' or bin == 'espeak-ng') and 1 or 0
+end
+package.loaded['tennant.tts'] = nil
+local chosen = require('tennant.tts')
+chosen.setup({ backend = 'espeak-ng', voice = 'en' })
+assert(not pcall(chosen.setup, { backend = 'festival' }))
+chosen.speak('selected')
+assert(calls[#calls].command[1] == 'espeak-ng', 'Keep the selected backend after invalid configuration')
+chosen.stop()
 local tts = require('tennant.tts')
 tts.speak('failure')
 calls[#calls].callback({ code = 1 })
