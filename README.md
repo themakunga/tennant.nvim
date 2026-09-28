@@ -1,5 +1,10 @@
 # tennant.nvim
 
+[![CI](https://github.com/themakunga/tennant.nvim/actions/workflows/ci.yml/badge.svg)](https://github.com/themakunga/tennant.nvim/actions/workflows/ci.yml)
+![Neovim 0.12+](https://img.shields.io/badge/Neovim-0.12%2B-57A143?logo=neovim)
+![macOS · Linux · Windows](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-blue)
+[![MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+
 > **Text-to-Speech for Neovim** — lee en voz alta palabras, líneas, bloques y notificaciones usando el motor TTS nativo de tu sistema operativo.
 >
 > **Text-to-Speech for Neovim** — reads aloud words, lines, blocks and notifications using your OS's native TTS engine.
@@ -23,6 +28,15 @@
 | **Treesitter** | Opcional — mejora la lectura de bloques por tipo |
 
 ### Instalación
+
+#### vim.pack.add (Neovim >= 0.12)
+
+Agrega esto a tu `init.lua`:
+
+```lua
+vim.pack.add({ 'https://github.com/themakunga/tennant.nvim' })
+require('tennant').setup()
+```
 
 #### lazy.nvim (recomendado)
 
@@ -92,11 +106,16 @@ require('rocks').install('tennant.nvim')
 ```lua
 require('tennant').setup({
   prefix = '<leader>tv',
-  language = 'es', -- 'es' (default) or 'en'
+  language = 'es', -- 'es' (predeterminado) o 'en'
+  tts = {
+    -- backend = 'espeak-ng', -- opcional; fuerza un motor instalado
+    -- voice = 'es', -- nombre de voz del motor seleccionado
+    -- rate = 190, -- unidad y rango dependen del motor
+  },
 })
 ```
 
-`language` cambia los avisos, las etiquetas leídas y las descripciones de comandos y atajos. El contenido del archivo y las notificaciones externas se leen sin traducir. La voz y pronunciación dependen de la configuración del motor TTS del sistema; selecciona una voz inglesa en ese motor para leer inglés.
+`language` cambia los avisos, las etiquetas leídas y las descripciones de comandos y atajos. El contenido del archivo y las notificaciones externas se leen sin traducir. `tts.voice` selecciona una voz instalada; `language` no cambia la voz automáticamente. Consulta la [tabla de opciones](#opciones--options) al final.
 
 ### Atajos de teclado
 
@@ -153,6 +172,15 @@ Cuando Treesitter está disponible, `:TennantBlock` identifica y anuncia el tipo
 | **Treesitter** | Optional — improves block reading by type |
 
 ### Installation
+
+#### vim.pack.add (Neovim >= 0.12)
+
+Add this to your `init.lua`:
+
+```lua
+vim.pack.add({ 'https://github.com/themakunga/tennant.nvim' })
+require('tennant').setup()
+```
 
 #### lazy.nvim (recommended)
 
@@ -223,10 +251,15 @@ require('rocks').install('tennant.nvim')
 require('tennant').setup({
   prefix = '<leader>tv',
   language = 'en', -- 'es' (default) or 'en'
+  tts = {
+    -- backend = 'espeak-ng', -- optional; choose an installed engine
+    -- voice = 'en', -- voice name for the chosen engine
+    -- rate = 190, -- units and range depend on the engine
+  },
 })
 ```
 
-Set `language = 'en'` for English announcements, spoken labels, and command/keymap descriptions. Spanish (`'es'`) remains the default. File contents and external notifications are read without translation. Voice and pronunciation follow your system TTS configuration; select an English voice in that engine for English speech.
+Set `language = 'en'` for English announcements, spoken labels, and command/keymap descriptions. Spanish (`'es'`) remains the default. File contents and external notifications are read without translation. `tts.voice` selects an installed voice; `language` does not automatically change it. See the [options table](#opciones--options) at the end.
 
 ### Keymaps
 
@@ -269,9 +302,35 @@ When Treesitter is available, `:TennantBlock` identifies and announces the block
 ## Development / Desarrollo
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for hooks, tests, branch policy and daily
-pre-releases. Consulta esa guía para contribuir mediante PR hacia `develop`.
+pre-releases. Consulta esa guía para contribuir mediante PR hacia `main`.
 Security reports / Reportes de seguridad: [SECURITY.md](SECURITY.md).
 
 ## License
 
 MIT
+
+## Opciones / Options
+
+`require('tennant').setup({ ... })` acepta / accepts:
+
+| Opción / Option | Predeterminado / Default | Descripción / Description |
+|-----------------|---------------------------|---------------------------|
+| `prefix` | `'<leader>tv'` | Prefijo de atajos / Keymap prefix. |
+| `language` | `'es'` | Avisos y etiquetas: `'es'` o `'en'` / Announcements and labels: `'es'` or `'en'`. |
+| `tts.backend` | Autodetectado / Auto-detected | `'say'` (macOS), `'powershell'` (Windows), `'spd-say'`, `'espeak-ng'`, `'espeak'` o / or `'festival'` (Linux). El motor indicado debe estar disponible / The chosen engine must be available. |
+| `tts.voice` | Voz del sistema / System default | Nombre de una voz instalada / Name of an installed voice. No disponible con / Unavailable with `festival`. |
+| `tts.rate` | Predeterminado del motor / Engine default | Velocidad; unidades y rangos en la tabla siguiente / Speed; units and ranges below. |
+| `tts.pitch` | Predeterminado del motor / Engine default | Tono / Pitch; compatible con / supported by `spd-say`, `espeak-ng`, `espeak`. |
+| `tts.volume` | Predeterminado del motor / Engine default | Volumen o amplitud / Volume or amplitude; compatible con / supported by Windows, `spd-say`, `espeak-ng`, `espeak`. |
+
+| Motor / Engine | `tts.voice` | `tts.rate` | `tts.pitch` | `tts.volume` |
+|---------------|-------------|------------|-------------|--------------|
+| macOS `say` | Voz de `say -v '?'` / Voice from `say -v '?'` | Palabras por minuto, entero ≥ 1 / Words per minute, integer ≥ 1 | — | — |
+| Windows PowerShell | Nombre de voz instalada / Installed voice name | Entero / Integer −10…10 | — | Entero / Integer 0…100 |
+| Linux `spd-say` | Voz de síntesis (`spd-say -L`) / Synthesis voice (`spd-say -L`) | Entero / Integer −100…100 | Entero / Integer −100…100 | Entero / Integer −100…100 |
+| Linux `espeak-ng`, `espeak` | Voz de `--voices` / Voice from `--voices` | Palabras por minuto, entero ≥ 1 / Words per minute, integer ≥ 1 | Entero / Integer 0…99 | Amplitud, entero / Amplitude, integer 0…200 |
+| Linux `festival` | — | — | — | — |
+
+**Español:** En Linux, el primer motor disponible se elige en este orden: `spd-say`, `espeak-ng`, `espeak`, `festival`. Usa `tts.backend` para elegir otro. Todas las opciones de `tts` son opcionales; un valor fuera de rango, un motor inexistente o una opción que no admita el motor produce un error de configuración. El nombre de voz y las unidades de velocidad dependen del motor. Ejemplo: `tts = { backend = 'espeak-ng', voice = 'es', rate = 190, pitch = 55 }`.
+
+**English:** On Linux, the first available engine is selected in this order: `spd-say`, `espeak-ng`, `espeak`, `festival`. Use `tts.backend` to choose another. All `tts` options are optional; an out-of-range value, unavailable engine, or option unsupported by the chosen engine raises a configuration error. Voice names and speed units depend on the engine. Example: `tts = { backend = 'espeak-ng', voice = 'en', rate = 190, pitch = 55 }`.
