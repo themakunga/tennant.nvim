@@ -34,7 +34,7 @@ local function check_treesitter()
   end
 end
 
----@param opts? { prefix?: string, language?: "es"|"en" }
+---@param opts? { prefix?: string, language?: "es"|"en", tts?: { backend?: string, voice?: string, rate?: integer, pitch?: integer, volume?: integer } }
 M.setup = function(opts)
   opts = opts or {}
   require('tennant.i18n').setup(opts.language)
@@ -43,6 +43,9 @@ M.setup = function(opts)
   end
 
   local tts = require('tennant.tts')
+  if tts.setup then
+    tts.setup(opts.tts)
+  end
   check_tts(tts)
   check_treesitter()
 
