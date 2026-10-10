@@ -1,9 +1,9 @@
 name: CI
 on:
   push:
-    branches: [develop, main]
+    branches: [main]
   pull_request:
-    branches: [develop, main]
+    branches: [main]
   workflow_dispatch:
 permissions:
   contents: read
@@ -83,7 +83,7 @@ jobs:
           test "$QUALITY" = success && test "$E2E" = success
   publish:
     name: Report and daily pre-release
-    if: always() && github.event_name == 'push' && github.ref == 'refs/heads/develop'
+    if: always() && github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: [gate]
     runs-on: ubuntu-24.04
     timeout-minutes: 10
