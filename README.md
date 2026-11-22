@@ -15,13 +15,13 @@
 
 ### Requirements
 
-| Platform | Requirement |
-|----------|-------------|
-| **macOS** | `say` (built-in) |
-| **Linux** | `spd-say`, `espeak-ng`, `espeak` or `festival` (any one) |
-| **Windows** | PowerShell + .NET Framework (built-in) |
-| **Neovim** | >= 0.12 |
-| **Treesitter** | Optional — improves block reading by type |
+| Platform       | Requirement                                              |
+| -------------- | -------------------------------------------------------- |
+| **macOS**      | `say` (built-in)                                         |
+| **Linux**      | `spd-say`, `espeak-ng`, `espeak` or `festival` (any one) |
+| **Windows**    | PowerShell + .NET Framework (built-in)                   |
+| **Neovim**     | >= 0.12                                                  |
+| **Treesitter** | Optional — improves block reading by type                |
 
 ### Installation
 
@@ -117,26 +117,26 @@ Set `language = 'en'` for English announcements, spoken labels, and command/keym
 
 With the default prefix `<leader>tv`:
 
-| Key | Action |
-|-----|--------|
-| `<leader>tvw` | Read word under cursor |
-| `<leader>tvl` | Read current line |
-| `<leader>tvl` (Visual mode) | Read selected text (`v`, `V`, or `Ctrl-v`) |
-| `<leader>tvb` | Read the full nearest block (uses Treesitter if available) |
-| `<leader>tvp` | Move up and read the enclosing block |
-| `<leader>tvn` | Read notifications |
-| `<leader>tvs` | Stop speaking |
+| Key                         | Action                                                     |
+| --------------------------- | ---------------------------------------------------------- |
+| `<leader>tvw`               | Read word under cursor                                     |
+| `<leader>tvl`               | Read current line                                          |
+| `<leader>tvl` (Visual mode) | Read selected text (`v`, `V`, or `Ctrl-v`)                 |
+| `<leader>tvb`               | Read the full nearest block (uses Treesitter if available) |
+| `<leader>tvp`               | Move up and read the enclosing block                       |
+| `<leader>tvn`               | Read notifications                                         |
+| `<leader>tvs`               | Stop speaking                                              |
 
 ### Commands
 
-| Command | Description |
-|---------|-------------|
-| `:TennantWord` | Read word under cursor |
+| Command               | Description                                                           |
+| --------------------- | --------------------------------------------------------------------- |
+| `:TennantWord`        | Read word under cursor                                                |
 | `:[range]TennantLine` | Read current line or the given range (for example, `:2,5TennantLine`) |
-| `:TennantBlock` | Read the full nearest block |
-| `:TennantParent` | Move up and read the enclosing block |
-| `:TennantNotify` | Read notifications |
-| `:TennantStop` | Stop current speech |
+| `:TennantBlock`       | Read the full nearest block                                           |
+| `:TennantParent`      | Move up and read the enclosing block                                  |
+| `:TennantNotify`      | Read notifications                                                    |
+| `:TennantStop`        | Stop current speech                                                   |
 
 `<leader>tvb` starts at the nearest block to the cursor. Each `<leader>tvp` moves up one level through the whole file, then announces “No more nesting levels” when configured in English. Moving the cursor or editing text restarts traversal from the current position. Without a Treesitter parser, reading falls back to the current line.
 
@@ -159,13 +159,13 @@ When Treesitter is available, `:TennantBlock` identifies and announces the block
 
 ### Requisitos
 
-| Plataforma | Requisito |
-|------------|-----------|
-| **macOS** | `say` (incluido en el sistema) |
-| **Linux** | `spd-say`, `espeak-ng`, `espeak` o `festival` (cualquiera) |
-| **Windows** | PowerShell + .NET Framework (incluido en Windows) |
-| **Neovim** | >= 0.12 |
-| **Treesitter** | Opcional — mejora la lectura de bloques por tipo |
+| Plataforma     | Requisito                                                  |
+| -------------- | ---------------------------------------------------------- |
+| **macOS**      | `say` (incluido en el sistema)                             |
+| **Linux**      | `spd-say`, `espeak-ng`, `espeak` o `festival` (cualquiera) |
+| **Windows**    | PowerShell + .NET Framework (incluido en Windows)          |
+| **Neovim**     | >= 0.12                                                    |
+| **Treesitter** | Opcional — mejora la lectura de bloques por tipo           |
 
 ### Instalación
 
@@ -261,26 +261,26 @@ require('tennant').setup({
 
 Con el prefijo por defecto `<leader>tv`:
 
-| Atajo | Acción |
-|-------|--------|
-| `<leader>tvw` | Leer la palabra bajo el cursor |
-| `<leader>tvl` | Leer la línea actual |
-| `<leader>tvl` (modo visual) | Leer el texto seleccionado (`v`, `V` o `Ctrl-v`) |
-| `<leader>tvb` | Leer el bloque completo más cercano (usa Treesitter si está disponible) |
-| `<leader>tvp` | Subir y leer el bloque contenedor |
-| `<leader>tvn` | Leer las notificaciones |
-| `<leader>tvs` | Detener la lectura |
+| Atajo                       | Acción                                                                  |
+| --------------------------- | ----------------------------------------------------------------------- |
+| `<leader>tvw`               | Leer la palabra bajo el cursor                                          |
+| `<leader>tvl`               | Leer la línea actual                                                    |
+| `<leader>tvl` (modo visual) | Leer el texto seleccionado (`v`, `V` o `Ctrl-v`)                        |
+| `<leader>tvb`               | Leer el bloque completo más cercano (usa Treesitter si está disponible) |
+| `<leader>tvp`               | Subir y leer el bloque contenedor                                       |
+| `<leader>tvn`               | Leer las notificaciones                                                 |
+| `<leader>tvs`               | Detener la lectura                                                      |
 
 ### Comandos
 
-| Comando | Descripción |
-|---------|-------------|
-| `:TennantWord` | Lee la palabra bajo el cursor |
+| Comando               | Descripción                                                              |
+| --------------------- | ------------------------------------------------------------------------ |
+| `:TennantWord`        | Lee la palabra bajo el cursor                                            |
 | `:[rango]TennantLine` | Lee la línea actual o el rango indicado (por ejemplo, `:2,5TennantLine`) |
-| `:TennantBlock` | Lee el bloque completo más cercano |
-| `:TennantParent` | Sube y lee el bloque contenedor |
-| `:TennantNotify` | Lee las notificaciones |
-| `:TennantStop` | Detiene la lectura en curso |
+| `:TennantBlock`       | Lee el bloque completo más cercano                                       |
+| `:TennantParent`      | Sube y lee el bloque contenedor                                          |
+| `:TennantNotify`      | Lee las notificaciones                                                   |
+| `:TennantStop`        | Detiene la lectura en curso                                              |
 
 `<leader>tvb` inicia la lectura desde el bloque más cercano al cursor. Cada `<leader>tvp` sube un nivel hasta leer el archivo; después anuncia «No existen más niveles de anidación». Mover el cursor o editar el texto reinicia el recorrido desde la posición actual. Sin un parser de Treesitter, se lee la línea actual.
 
@@ -309,24 +309,41 @@ MIT
 
 `require('tennant').setup({ ... })` accepts / acepta:
 
-| Option / Opción | Default / Predeterminado | Description / Descripción |
-|-----------------|---------------------------|---------------------------|
-| `prefix` | `'<leader>tv'` | Keymap prefix / Prefijo de atajos. |
-| `language` | `'es'` | Announcements and labels: `'es'` or `'en'` / Avisos y etiquetas: `'es'` o `'en'`. |
-| `tts.backend` | Auto-detected / Autodetectado | `'say'` (macOS), `'powershell'` (Windows), `'spd-say'`, `'espeak-ng'`, `'espeak'` or / o `'festival'` (Linux). The chosen engine must be available / El motor indicado debe estar disponible. |
-| `tts.voice` | System default / Voz del sistema | Name of an installed voice / Nombre de una voz instalada. Unavailable with / No disponible con `festival`. |
-| `tts.rate` | Engine default / Predeterminado del motor | Speed; units and ranges below / Velocidad; unidades y rangos en la tabla siguiente. |
-| `tts.pitch` | Engine default / Predeterminado del motor | Pitch / Tono; supported by / compatible con `spd-say`, `espeak-ng`, `espeak`. |
-| `tts.volume` | Engine default / Predeterminado del motor | Volume or amplitude / Volumen o amplitud; supported by / compatible con Windows, `spd-say`, `espeak-ng`, `espeak`. |
+| Option / Opción | Default / Predeterminado                  | Description / Descripción                                                                                                                                                                     |
+| --------------- | ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `prefix`        | `'<leader>tv'`                            | Keymap prefix / Prefijo de atajos.                                                                                                                                                            |
+| `language`      | `'es'`                                    | Announcements and labels: `'es'` or `'en'` / Avisos y etiquetas: `'es'` o `'en'`.                                                                                                             |
+| `tts.backend`   | Auto-detected / Autodetectado             | `'say'` (macOS), `'powershell'` (Windows), `'spd-say'`, `'espeak-ng'`, `'espeak'` or / o `'festival'` (Linux). The chosen engine must be available / El motor indicado debe estar disponible. |
+| `tts.voice`     | System default / Voz del sistema          | Name of an installed voice / Nombre de una voz instalada. Unavailable with / No disponible con `festival`.                                                                                    |
+| `tts.rate`      | Engine default / Predeterminado del motor | Speed; units and ranges below / Velocidad; unidades y rangos en la tabla siguiente.                                                                                                           |
+| `tts.pitch`     | Engine default / Predeterminado del motor | Pitch / Tono; supported by / compatible con `spd-say`, `espeak-ng`, `espeak`.                                                                                                                 |
+| `tts.volume`    | Engine default / Predeterminado del motor | Volume or amplitude / Volumen o amplitud; supported by / compatible con Windows, `spd-say`, `espeak-ng`, `espeak`.                                                                            |
 
-| Engine / Motor | `tts.voice` | `tts.rate` | `tts.pitch` | `tts.volume` |
-|---------------|-------------|------------|-------------|--------------|
-| macOS `say` | Voice from `say -v '?'` / Voz de `say -v '?'` | Words per minute, integer ≥ 1 / Palabras por minuto, entero ≥ 1 | — | — |
-| Windows PowerShell | Installed voice name / Nombre de voz instalada | Integer / Entero −10…10 | — | Integer / Entero 0…100 |
-| Linux `spd-say` | Synthesis voice (`spd-say -L`) / Voz de síntesis (`spd-say -L`) | Integer / Entero −100…100 | Integer / Entero −100…100 | Integer / Entero −100…100 |
-| Linux `espeak-ng`, `espeak` | Voice from `--voices` / Voz de `--voices` | Words per minute, integer ≥ 1 / Palabras por minuto, entero ≥ 1 | Integer / Entero 0…99 | Amplitude, integer / Amplitud, entero 0…200 |
-| Linux `festival` | — | — | — | — |
+| Engine / Motor              | `tts.voice`                                                     | `tts.rate`                                                      | `tts.pitch`               | `tts.volume`                                |
+| --------------------------- | --------------------------------------------------------------- | --------------------------------------------------------------- | ------------------------- | ------------------------------------------- |
+| macOS `say`                 | Voice from `say -v '?'` / Voz de `say -v '?'`                   | Words per minute, integer ≥ 1 / Palabras por minuto, entero ≥ 1 | —                         | —                                           |
+| Windows PowerShell          | Installed voice name / Nombre de voz instalada                  | Integer / Entero −10…10                                         | —                         | Integer / Entero 0…100                      |
+| Linux `spd-say`             | Synthesis voice (`spd-say -L`) / Voz de síntesis (`spd-say -L`) | Integer / Entero −100…100                                       | Integer / Entero −100…100 | Integer / Entero −100…100                   |
+| Linux `espeak-ng`, `espeak` | Voice from `--voices` / Voz de `--voices`                       | Words per minute, integer ≥ 1 / Palabras por minuto, entero ≥ 1 | Integer / Entero 0…99     | Amplitude, integer / Amplitud, entero 0…200 |
+| Linux `festival`            | —                                                               | —                                                               | —                         | —                                           |
 
 **English:** On Linux, the first available engine is selected in this order: `spd-say`, `espeak-ng`, `espeak`, `festival`. Use `tts.backend` to choose another. All `tts` options are optional; an out-of-range value, unavailable engine, or option unsupported by the chosen engine raises a configuration error. Voice names and speed units depend on the engine. Example: `tts = { backend = 'espeak-ng', voice = 'en', rate = 190, pitch = 55 }`.
 
 **Español:** En Linux, el primer motor disponible se elige en este orden: `spd-say`, `espeak-ng`, `espeak`, `festival`. Usa `tts.backend` para elegir otro. Todas las opciones de `tts` son opcionales; un valor fuera de rango, un motor inexistente o una opción que no admita el motor produce un error de configuración. El nombre de voz y las unidades de velocidad dependen del motor. Ejemplo: `tts = { backend = 'espeak-ng', voice = 'es', rate = 190, pitch = 55 }`.
+
+## Repository reference
+
+| Path                                 | Purpose                             |
+| ------------------------------------ | ----------------------------------- |
+| [`lua/`](lua/)                       | Neovim Lua modules                  |
+| [`scripts/`](scripts/)               | Maintenance and validation commands |
+| [`tests/`](tests/)                   | Tests and regression checks         |
+| [`CONTRIBUTING.md`](CONTRIBUTING.md) | Contribution guidelines             |
+| [`SECURITY.md`](SECURITY.md)         | Project reference                   |
+
+The default branch is `main`. Use the tracked manifests and scripts above
+when preparing changes; keep local credentials and generated files out of commits.
+
+Referencia: consulta `CONTRIBUTING.md` para contribuir, `lua/` para los módulos,
+`scripts/` y `tests/` para validación. Los cambios parten de `main` y se integran
+mediante PR; solo el propietario realiza el merge a `main`.
