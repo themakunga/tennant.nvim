@@ -1,5 +1,7 @@
 # tennant.nvim
 
+![Lua](https://img.shields.io/badge/Lua-2C2D72?style=flat-square&logo=lua&logoColor=white)
+
 [![CI](https://github.com/themakunga/tennant.nvim/actions/workflows/ci.yml/badge.svg)](https://github.com/themakunga/tennant.nvim/actions/workflows/ci.yml)
 ![Neovim 0.12+](https://img.shields.io/badge/Neovim-0.12%2B-57A143?logo=neovim)
 ![macOS · Linux · Windows](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-blue)
